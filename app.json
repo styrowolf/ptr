@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "town.kurt.ptr"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +28,11 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "@maplibre/maplibre-react-native",
+      ["expo-font", {
+        "fonts": ["node_modules/@expo-google-fonts/ibm-plex-mono/IBMPlexMono_400Regular.ttf"]
+      }]
     ],
     "experiments": {
       "typedRoutes": true

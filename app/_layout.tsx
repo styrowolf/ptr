@@ -1,37 +1,57 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import MapLibreGL from '@maplibre/maplibre-react-native';
+import React, { useEffect, useReducer, useState } from "react";
+import { useFonts } from "expo-font";
+import { IBMPlexMono_700Bold_Italic } from '@expo-google-fonts/ibm-plex-mono';
+import { ToplasAPICache } from "./storage";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+ToplasAPICache.clear();
+
+MapLibreGL.setAccessToken(null);
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [loaded, error] = useFonts({
+    'IBMPlexMono-BI': IBMPlexMono_700Bold_Italic,
   });
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded || error) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, error]);
 
-  if (!loaded) {
+  if (!loaded && !error) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+    <GestureHandlerRootView>
+      <Stack screenOptions={{
+        headerBackTitleVisible: false,
+        headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: "IBMPlexMono-BI",
+          color: 'white',
+        },}}>
+        <Stack.Screen name="index" options={{title: "toplaş"}}/>
+        <Stack.Screen name="stops/[code]/index" />
+        <Stack.Screen name="stops/[code]/announcements" />
+        <Stack.Screen name="stops/search" />
+        <Stack.Screen name="lines/[code]/index" />
+        <Stack.Screen name="lines/[code]/map" />
+        <Stack.Screen name="lines/[code]/schedule" />
+        <Stack.Screen name="lines/[code]/announcements" />
+        <Stack.Screen name="lines/search" />
+        <Stack.Screen name="bus/[vehicleDoorNo]" />
       </Stack>
-    </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

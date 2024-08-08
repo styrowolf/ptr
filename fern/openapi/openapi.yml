@@ -1,0 +1,1042 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+servers:
+  - url: /api
+paths:
+  "":
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /line/{line_code}/stops:
+    get:
+      summary: Line Stops
+      operationId: line_stops_line__line_code__stops_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+        - name: route_code
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Route Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineStop'
+                title: Response Line Stops Line  Line Code  Stops Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /line/{line_code}/routes:
+    get:
+      summary: Routes
+      operationId: routes_line__line_code__routes_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+                title: Response Routes Line  Line Code  Routes Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /line/{line_code}/timetable:
+    get:
+      summary: Timetable
+      operationId: timetable_line__line_code__timetable_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimetableTrip'
+                title: Response Timetable Line  Line Code  Timetable Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /line/{line_code}/info:
+    get:
+      summary: Line Info
+      operationId: Line_info_line__line_code__info_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineInfo'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: lineInfo
+  /route/{route_code}/stops:
+    get:
+      summary: Route Stops
+      operationId: route_stops_route__route_code__stops_get
+      parameters:
+        - name: route_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Route Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineStop'
+                title: Response Route Stops Route  Route Code  Stops Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /route/{route_code}/timetable:
+    get:
+      summary: Route Timetable
+      operationId: route_timetable_route__route_code__timetable_get
+      parameters:
+        - name: route_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Route Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimetableTrip'
+                title: Response Route Timetable Route  Route Code  Timetable Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /route/{route_code}/info/:
+    get:
+      summary: Line
+      operationId: Line_route__route_code__info__get
+      parameters:
+        - name: route_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Route Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteInfo'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: routeInfo
+  /stops:
+    get:
+      summary: Nearby Stops
+      operationId: nearby_stops_stops_get
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: number
+            title: Lat
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: number
+            title: Lon
+        - name: radius
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: number
+              - type: 'null'
+            default: 1000
+            title: Radius
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NearbyStop'
+                title: Response Nearby Stops Stops Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /stop/{stop_code}/lines:
+    get:
+      summary: Lines On Stop
+      operationId: lines_on_stop_stop__stop_code__lines_get
+      parameters:
+        - name: stop_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Stop Code
+        - name: api
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+            title: Api
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineOnStop'
+                title: Response Lines On Stop Stop  Stop Code  Lines Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /stop/{stop_code}/info:
+    get:
+      summary: Stop Info
+      operationId: Stop_info_stop__stop_code__info_get
+      parameters:
+        - name: stop_code
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Stop Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopInfo'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: stopInfo
+  /live/line/{line_code}/buses:
+    get:
+      summary: Live Buses On Route
+      operationId: Live_buses_on_route_live_line__line_code__buses_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiveBus'
+                title: Response Live Buses On Route Live Line  Line Code  Buses Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: liveBusesOnRoute
+  /live/line/{line_code}/announcements:
+    get:
+      summary: Line Announcements
+      operationId: line_announcements_live_line__line_code__announcements_get
+      parameters:
+        - name: line_code
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Line Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineAnnouncement'
+                title: >-
+                  Response Line Announcements Live Line  Line Code 
+                  Announcements Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /live/stop/{stop_code}/arrivals:
+    get:
+      summary: Live Arrivals At Stop
+      operationId: Live_arrivals_at_stop_live_stop__stop_code__arrivals_get
+      parameters:
+        - name: stop_code
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Stop Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Arrival'
+                title: >-
+                  Response Live Arrivals At Stop Live Stop  Stop Code  Arrivals
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: stopArrivals
+  /live/stop/{stop_code}/announcements:
+    get:
+      summary: Stop Announcements
+      operationId: stop_announcements_live_stop__stop_code__announcements_get
+      parameters:
+        - name: stop_code
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Stop Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StopAnnouncement'
+                title: >-
+                  Response Stop Announcements Live Stop  Stop Code 
+                  Announcements Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /live/bus/{vehicle_door_no}:
+    get:
+      summary: Bus Location
+      operationId: bus_location_live_bus__vehicle_door_no__get
+      parameters:
+        - name: vehicle_door_no
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Vehicle Door No
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveBusIndividual'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /search/line:
+    get:
+      summary: Search Route
+      operationId: Search_route_search_line_get
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            title: Query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Line'
+                title: Response Search Route Search Line Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: searchRoute
+  /search/stop:
+    get:
+      summary: Search Stop
+      operationId: Search_stop_search_stop_get
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            title: Query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stop'
+                title: Response Search Stop Search Stop Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-fern-sdk-method-name: searchStop
+components:
+  schemas:
+    Amenities:
+      properties:
+        wheelchair_accessible:
+          type: boolean
+          title: Wheelchair Accessible
+        wifi:
+          type: boolean
+          title: Wifi
+        air_conditioning:
+          type: boolean
+          title: Air Conditioning
+        usb:
+          type: boolean
+          title: Usb
+        bicycle:
+          type: boolean
+          title: Bicycle
+      type: object
+      required:
+        - wheelchair_accessible
+        - wifi
+        - air_conditioning
+        - usb
+        - bicycle
+      title: Amenities
+    Arrival:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        route_code:
+          type: string
+          title: Route Code
+        line_name:
+          type: string
+          title: Line Name
+        vehicle_door_no:
+          type: string
+          title: Vehicle Door No
+        last_location_time:
+          type: string
+          format: time
+          title: Last Location Time
+        last_speed:
+          type: number
+          title: Last Speed
+        last_location:
+          $ref: '#/components/schemas/Coordinates'
+        stop_order:
+          type: integer
+          title: Stop Order
+        minutes_until_arrival:
+          type: integer
+          title: Minutes Until Arrival
+        amenities:
+          $ref: '#/components/schemas/Amenities'
+      type: object
+      required:
+        - line_code
+        - route_code
+        - line_name
+        - vehicle_door_no
+        - last_location_time
+        - last_speed
+        - last_location
+        - stop_order
+        - minutes_until_arrival
+        - amenities
+      title: Arrival
+    Coordinates:
+      properties:
+        x:
+          type: number
+          title: X
+        'y':
+          type: number
+          title: 'Y'
+      type: object
+      required:
+        - x
+        - 'y'
+      title: Coordinates
+    DayType:
+      type: string
+      enum:
+        - working_day
+        - saturday
+        - sunday
+      title: DayType
+    Direction:
+      type: string
+      enum:
+        - outbound
+        - inbound
+      title: Direction
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Line:
+      properties:
+        line_name:
+          type: string
+          title: Line Name
+        line_id:
+          type: integer
+          title: Line Id
+        line_code:
+          type: string
+          title: Line Code
+      type: object
+      required:
+        - line_name
+        - line_id
+        - line_code
+      title: Line
+    LineAnnouncement:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        information:
+          type: string
+          title: Information
+      type: object
+      required:
+        - line_code
+        - information
+      title: LineAnnouncement
+    LineInfo:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        line_id:
+          type: integer
+          title: Line Id
+        line_name:
+          type: string
+          title: Line Name
+        routes:
+          items:
+            $ref: '#/components/schemas/RouteInfo'
+          type: array
+          title: Routes
+      type: object
+      required:
+        - line_code
+        - line_id
+        - line_name
+        - routes
+      title: LineInfo
+    LineOnStop:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        line_id:
+          type: integer
+          title: Line Id
+        route_code:
+          type: string
+          title: Route Code
+        route_id:
+          type: integer
+          title: Route Id
+        route_name:
+          type: string
+          title: Route Name
+      type: object
+      required:
+        - line_code
+        - line_id
+        - route_code
+        - route_id
+        - route_name
+      title: LineOnStop
+    LineStop:
+      properties:
+        stop_name:
+          type: string
+          title: Stop Name
+        stop_code:
+          type: integer
+          title: Stop Code
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        direction:
+          type: string
+          title: Direction
+        line_code:
+          type: string
+          title: Line Code
+        line_id:
+          type: integer
+          title: Line Id
+        route_code:
+          type: string
+          title: Route Code
+        route_order:
+          type: integer
+          title: Route Order
+        route_direction:
+          $ref: '#/components/schemas/Direction'
+      type: object
+      required:
+        - stop_name
+        - stop_code
+        - coordinates
+        - direction
+        - line_code
+        - line_id
+        - route_code
+        - route_order
+        - route_direction
+      title: LineStop
+    LiveBus:
+      properties:
+        line_id:
+          type: integer
+          title: Line Id
+        route_code:
+          type: string
+          title: Route Code
+        vehicle_door_no:
+          type: string
+          title: Vehicle Door No
+        last_location_time:
+          type: string
+          format: time
+          title: Last Location Time
+        last_location:
+          $ref: '#/components/schemas/Coordinates'
+        stop_order:
+          type: integer
+          title: Stop Order
+        stop_id:
+          type: integer
+          title: Stop Id
+        stop_enter_time:
+          anyOf:
+            - type: string
+              format: time
+            - type: 'null'
+          title: Stop Enter Time
+        stop_exit_time:
+          anyOf:
+            - type: string
+              format: time
+            - type: 'null'
+          title: Stop Exit Time
+      type: object
+      required:
+        - line_id
+        - route_code
+        - vehicle_door_no
+        - last_location_time
+        - last_location
+        - stop_order
+        - stop_id
+        - stop_enter_time
+        - stop_exit_time
+      title: LiveBus
+    LiveBusIndividual:
+      properties:
+        vehicle_door_no:
+          type: string
+          title: Vehicle Door No
+        last_location_time:
+          type: string
+          format: time
+          title: Last Location Time
+        last_location:
+          $ref: '#/components/schemas/Coordinates'
+        vehicle_plate:
+          type: string
+          title: Vehicle Plate
+        speed:
+          type: number
+          title: Speed
+      type: object
+      required:
+        - vehicle_door_no
+        - last_location_time
+        - last_location
+        - vehicle_plate
+        - speed
+      title: LiveBusIndividual
+    NearbyStop:
+      properties:
+        stop_name:
+          type: string
+          title: Stop Name
+        stop_code:
+          type: integer
+          title: Stop Code
+        stop_id:
+          type: integer
+          title: Stop Id
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        direction:
+          type: string
+          title: Direction
+        distance:
+          type: number
+          title: Distance
+      type: object
+      required:
+        - stop_name
+        - stop_code
+        - stop_id
+        - coordinates
+        - direction
+        - distance
+      title: NearbyStop
+    Route:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        line_id:
+          type: integer
+          title: Line Id
+        line_description:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Line Description
+        line_name:
+          type: string
+          title: Line Name
+        route_code:
+          type: string
+          title: Route Code
+        route_id:
+          type: integer
+          title: Route Id
+        route_description:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Route Description
+        route_name:
+          type: string
+          title: Route Name
+        route_direction:
+          $ref: '#/components/schemas/Direction'
+      type: object
+      required:
+        - line_code
+        - line_id
+        - line_description
+        - line_name
+        - route_code
+        - route_id
+        - route_description
+        - route_name
+        - route_direction
+      title: Route
+    RouteInfo:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        line_id:
+          type: integer
+          title: Line Id
+        line_description:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Line Description
+        line_name:
+          type: string
+          title: Line Name
+        route_code:
+          type: string
+          title: Route Code
+        route_id:
+          type: integer
+          title: Route Id
+        route_description:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Route Description
+        route_name:
+          type: string
+          title: Route Name
+        route_direction:
+          $ref: '#/components/schemas/Direction'
+        stops:
+          items:
+            $ref: '#/components/schemas/LineStop'
+          type: array
+          title: Stops
+        trips:
+          items:
+            $ref: '#/components/schemas/TimetableTrip'
+          type: array
+          title: Trips
+      type: object
+      required:
+        - line_code
+        - line_id
+        - line_description
+        - line_name
+        - route_code
+        - route_id
+        - route_description
+        - route_name
+        - route_direction
+        - stops
+        - trips
+      title: RouteInfo
+    Stop:
+      properties:
+        stop_name:
+          type: string
+          title: Stop Name
+        stop_code:
+          type: integer
+          title: Stop Code
+        stop_id:
+          type: integer
+          title: Stop Id
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        direction:
+          type: string
+          title: Direction
+      type: object
+      required:
+        - stop_name
+        - stop_code
+        - stop_id
+        - coordinates
+        - direction
+      title: Stop
+    StopAnnouncement:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        information:
+          type: string
+          title: Information
+      type: object
+      required:
+        - line_code
+        - information
+      title: StopAnnouncement
+    StopInfo:
+      properties:
+        stop_name:
+          type: string
+          title: Stop Name
+        stop_code:
+          type: integer
+          title: Stop Code
+        stop_id:
+          type: integer
+          title: Stop Id
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        direction:
+          type: string
+          title: Direction
+        lines:
+          items:
+            $ref: '#/components/schemas/LineOnStop'
+          type: array
+          title: Lines
+      type: object
+      required:
+        - stop_name
+        - stop_code
+        - stop_id
+        - coordinates
+        - direction
+        - lines
+      title: StopInfo
+    TimetableTrip:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        route_code:
+          type: string
+          title: Route Code
+        time:
+          type: string
+          format: time
+          title: Time
+        day_type:
+          $ref: '#/components/schemas/DayType'
+        direction:
+          $ref: '#/components/schemas/Direction'
+      type: object
+      required:
+        - line_code
+        - route_code
+        - time
+        - day_type
+        - direction
+      title: TimetableTrip
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
