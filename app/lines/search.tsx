@@ -3,7 +3,7 @@ import { set } from "@/sdks/typescript/core/schemas";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, TextInput, StyleSheet, Platform, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, TextInput, StyleSheet, Platform, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDebounce } from "use-debounce";
 import Divider from "../components/divider";
@@ -49,7 +49,7 @@ export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [debouncedQuery] = useDebounce(query, 300);
 
-    return (<SafeAreaView style={{ flex: 1}}>
+    return (<KeyboardAvoidingView style={{ flex: 1}}>
         <Stack.Screen
             options={{
                 title: "Search Lines",
@@ -59,7 +59,7 @@ export default function SearchPage() {
             <TextInput style={styles.searchBox} placeholder="search by line name or code" placeholderTextColor="black" onChangeText={(text) => setQuery(text)}></TextInput>
             <SearchResults query={debouncedQuery}></SearchResults>
         </View>
-    </SafeAreaView>)
+    </KeyboardAvoidingView>)
 }
 
 function SearchResults({query}: {query: string}) {
