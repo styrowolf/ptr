@@ -7,6 +7,7 @@ import { FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-ico
 import { TouchableOpacity } from "react-native";
 import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
 import BottomSheet from "@gorhom/bottom-sheet";
+import * as turf from "@turf/turf";
 
 const styles = StyleSheet.create({
   text: {
@@ -57,15 +58,23 @@ function SearchLines() {
     </TouchableOpacity>
 }
 
+function differentEnough(a: ToplasApi.Coordinates, b: ToplasApi.Coordinates) {
+  const aPoint = turf.point([a.x, a.y]);
+  const bPoint = turf.point([b.x, b.y]);
+  const distance = turf.distance(aPoint, bPoint, { units: "meters"});
+  return distance > 50;
+}
+
 export default function Index() {
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const userLocationRef = useRef<MapLibreGL.UserLocationRef | null>();
   const cameraRef = useRef<MapLibreGL.CameraRef | null>();
   const [stops, setStops] = useState<ToplasApi.NearbyStop[]>([]);
+  const [prevLocation, setPrevLocation] = useState<ToplasApi.Coordinates | null>(null);
   const [location, setLocation] = useState<ToplasApi.Coordinates | null>(null);
 
   useEffect(() => {
-    if (location) {
+    if (location && (!prevLocation || differentEnough(location, prevLocation))) {
       const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
       client.nearbyStopsStopsGet({ lat: location.y, lon: location.x, radius: 1000 }).then((val) => { setStops(val) });
       cameraRef.current?.setCamera({
@@ -73,6 +82,7 @@ export default function Index() {
         centerCoordinate: [location.x, location.y - 0.005],
         animationDuration: 2000,
       });
+      setPrevLocation(location);
     }
   }, [location]);
 
@@ -95,7 +105,6 @@ export default function Index() {
             />
              <MapLibreGL.UserLocation
               renderMode="native"
-              showsUserHeadingIndicator
               onUpdate={(location) => setLocation({ x: location.coords.longitude, y: location.coords.latitude })}
               ref={(r) => (userLocationRef.current = r)}
             />
