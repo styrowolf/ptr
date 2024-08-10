@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
         fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
     },
     view: {
-        fontSize: 20,
         flex: 1,
     },
     map: {
@@ -132,15 +131,31 @@ export default function LinePage() {
             </View>
             
         </SafeAreaView>)
-    } else {
-        return (<SafeAreaView>
+    } else if (error) {
+        return (<SafeAreaView style={styles.view}>
             <Stack.Screen
                 options={{
                     title: `${code}`,
                 }}
             />
-            <Text>Line Page {code} - {name}</Text>
-            <View></View>
+            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
+                <Text style={styles.title}>{code}</Text>
+                <Divider height={20}/>
+                <Text style={styles.text}>Line information cannot be retrieved at the moment.</Text>
+            </View>
+        </SafeAreaView>)
+    } else {
+        return (<SafeAreaView style={styles.view}>
+            <Stack.Screen
+                options={{
+                    title: `${code}`,
+                }}
+            />
+            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
+                <Text style={styles.title}>{code}</Text>
+                <Divider height={20}/>
+                <Text style={styles.text}>Loading...</Text>
+            </View>
         </SafeAreaView>)
     }
     

@@ -118,16 +118,33 @@ export default function StopPage() {
                 </ScrollView>
             </View> 
         </SafeAreaView>)
-    } else {
-        return (<SafeAreaView>
+    } else if (error) {
+        return (<SafeAreaView style={{ flex: 1 }}>
             <Stack.Screen
                 options={{
                     title: `${name}`,
                 }}
             />
-            <Text>Stop Page {code} - {name}</Text>
-            <View></View>
+            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
+                <Text style={styles.title}>{name}</Text>
+                <Text style={styles.subtitle}>Direction: {direction}</Text>
+                <Divider height={20}/>
+                <Text style={styles.text}>Stop information cannot be retrieved at the moment.</Text>
+            </View>
+        </SafeAreaView>)
+    } else {
+        return (<SafeAreaView style={{ flex: 1 }}>
+            <Stack.Screen
+                options={{
+                    title: `${name}`,
+                }}
+            />
+            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
+                <Text style={styles.title}>{name}</Text>
+                <Text style={styles.subtitle}>Direction: {direction}</Text>
+                <Divider height={20}/>
+                <Text style={styles.text}>Loading...</Text>
+            </View>
         </SafeAreaView>)
     }
-    
 }

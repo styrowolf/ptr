@@ -30,6 +30,11 @@ const styles = StyleSheet.create({
         fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
         fontWeight: 'bold',
     },
+    view: { 
+        paddingTop: 10,
+        paddingHorizontal: 10, 
+        flex: 1 
+    },
 })
 
 export default function Announcements() {
@@ -44,29 +49,50 @@ export default function Announcements() {
         client.stopAnnouncementsLiveStopStopCodeAnnouncementsGet(Number(code)).then((val) => { setAnnouncements(val) }).catch(setError);
     }, []);
     
-    if (!announcements) {
-        return <View>
+    if (error) {
+        return (<View style={[styles.view, { paddingBottom: insets.bottom }]}>
             <Stack.Screen options={{ title: `Announcements`}} />
-            <Text>Error</Text>
-        </View>
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.subtitle}>Direction: {direction}</Text>
+            <Divider height={20}/>
+            <Text style={styles.announcementItem}>Announcements for this stop cannot be retrieved at the moment.</Text>
+        </View>)
+    } else if (announcements?.length === 0) {
+        return (<View style={[styles.view, { paddingBottom: insets.bottom }]}>
+            <Stack.Screen options={{ title: `Announcements`}} />
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.subtitle}>Direction: {direction}</Text>
+            <Divider height={20}/>
+            <Text style={styles.announcementItem}>No announcements for this stop.</Text>
+        </View>)
+    } else if (announcements) {
+        return (<View style={[styles.view, { paddingBottom: insets.bottom }]}>
+            <Stack.Screen options={{ title: `Announcements`}} />
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.subtitle}>Direction: {direction}</Text>
+            <Divider height={20}/>
+            <View style={{ flexDirection: "row", paddingBottom: 10 }}>
+                    <Text style={[styles.announcementsHeader, { flex: 2 }]}>Line</Text>
+                    <Text style={[styles.announcementsHeader, { flex: 7 }]}>Announcement</Text>
+                </View>
+            <ScrollView>
+                { announcements.map((announcement, i) => (<AnnouncementItem key={`${announcement.lineCode}-${i}`}  announcement={announcement} />)) }
+            </ScrollView>
+        </View>)
+    } else {
+        return (<View style={[styles.view, { paddingBottom: insets.bottom }]}>
+            <Stack.Screen options={{ title: `Announcements`}} />
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.subtitle}>Direction: {direction}</Text>
+            <Divider height={20}/>
+            <Text style={styles.announcementItem}>Loading...</Text>
+        </View>)
     }
+}
 
-    return <View style={{ paddingBottom: insets.bottom, paddingTop: 10, paddingHorizontal: 10, flex: 1 }}>
-    <Stack.Screen options={{ title: `Announcements`}} />
-    <Text style={styles.title}>{name}</Text>
-    <Text style={styles.subtitle}>Direction: {direction}</Text>
-    <Divider height={20}/>
-    <View style={{ flexDirection: "row", paddingBottom: 10 }}>
-            <Text style={[styles.announcementsHeader, { flex: 2 }]}>Line</Text>
-            <Text style={[styles.announcementsHeader, { flex: 7 }]}>Announcement</Text>
-        </View>
-    <ScrollView>
-        { announcements.map((announcement, i) => (
-            <View key={`${announcement.lineCode}-${i}`} style={{ flexDirection: "row" }}>
-                <Link href={{ pathname: "/lines/[code]", params: { code: announcement.lineCode } }} style={[styles.linesTableText, { flex: 2 }]}>{announcement.lineCode}</Link>
-                <Text style={[styles.announcementItem, { flex: 7 }]}>{announcement.information}</Text>
-            </View>
-        )) }
-    </ScrollView>
-</View>
+function AnnouncementItem({ announcement }: { announcement: ToplasApi.StopAnnouncement }) {
+    return (<View style={{ flexDirection: "row" }}>
+        <Link href={{ pathname: "/lines/[code]", params: { code: announcement.lineCode } }} style={[styles.linesTableText, { flex: 2 }]}>{announcement.lineCode}</Link>
+        <Text style={[styles.announcementItem, { flex: 7 }]}>{announcement.information}</Text>
+    </View>)
 }
