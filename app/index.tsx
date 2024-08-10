@@ -8,6 +8,9 @@ import { TouchableOpacity } from "react-native";
 import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
 import BottomSheet from "@gorhom/bottom-sheet";
 import * as turf from "@turf/turf";
+import * as geojson from "geojson";
+import OnPressEvent from "@maplibre/maplibre-react-native/javascript/types/OnPressEvent";
+import Maplibre from "@maplibre/maplibre-react-native";
 
 const styles = StyleSheet.create({
   text: {
@@ -65,6 +68,32 @@ function differentEnough(a: ToplasApi.Coordinates, b: ToplasApi.Coordinates) {
   return distance > 50;
 }
 
+const layerStyles = {
+  stops: {
+    circleRadius: 8,
+    circleColor: "white",
+    circleStrokeColor: "black",
+    circleStrokeWidth: 3,
+  },
+  stopLabels: {
+    textField: ["get", "stopName"],
+    textSize: 12,
+    textColor: "black",
+    iconAllowOverlap: true,
+    textAllowOverlap: true,
+    iconTextFit: "both",
+    textFont: ["Noto Sans Regular"],
+  } satisfies MapLibreGL.SymbolLayerStyle,
+};
+
+function makeGeojson(stops: ToplasApi.NearbyStop[]) {
+  const geojson = turf.featureCollection(stops.map((stop) => {
+    const point = turf.point([stop.coordinates.x, stop.coordinates.y], { stopName: stop.stopName, direction: stop.direction }, { id: stop.stopCode });
+    return point;
+  }));
+  return geojson;
+}
+
 export default function Index() {
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const userLocationRef = useRef<MapLibreGL.UserLocationRef | null>();
@@ -72,7 +101,37 @@ export default function Index() {
   const [stops, setStops] = useState<ToplasApi.NearbyStop[]>([]);
   const [prevLocation, setPrevLocation] = useState<ToplasApi.Coordinates | null>(null);
   const [location, setLocation] = useState<ToplasApi.Coordinates | null>(null);
+  const sourceRef = useRef<MapLibreGL.ShapeSourceRef | null>(null);
+  const [show, setShow] = useState<number[]>([]);
+  const geojson = makeGeojson(stops);
 
+  function showCallback({ e, code }: { e?: OnPressEvent, code?: number }) {
+    if (e) {
+      const feature = e.features[0];
+      const stopCode = feature.id as number;
+
+      if (stopCode) {
+        if (show.includes(stopCode)) {
+          setShow(show.filter((e) => e != stopCode));
+        } else {
+          setShow([...show, stopCode]);
+        }
+      }
+
+    } else {
+      if (code) {
+        if (show.includes(code)) {
+          setShow(show.filter((e) => e != code));
+        } else {
+          setShow([...show, code]);
+        }
+      }
+    }
+    
+  }
+
+  
+  //(async () => { console.log(await sourceRef.current?.features())})()
   useEffect(() => {
     if (location && (!prevLocation || differentEnough(location, prevLocation))) {
       const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
@@ -85,6 +144,10 @@ export default function Index() {
       setPrevLocation(location);
     }
   }, [location]);
+
+  useEffect(() => {
+    console.log(show);
+  }, [show]);
 
   return (
     <View style={styles.view}>
@@ -103,18 +166,33 @@ export default function Index() {
                 zoomLevel: 14,
               }}
             />
+
+            <MapLibreGL.ShapeSource id="stops" ref={(r) => sourceRef.current = r} shape={geojson} hitbox={{ width: 8, height: 8 }} onPress={(e) => showCallback({ e })}>
+              <MapLibreGL.CircleLayer
+                id="stopCircles"
+                sourceID="stops"
+                maxZoomLevel={20}
+                minZoomLevel={0}
+                style={layerStyles.stops} />
+              
+            </MapLibreGL.ShapeSource>
+
              <MapLibreGL.UserLocation
               renderMode="native"
               onUpdate={(location) => setLocation({ x: location.coords.longitude, y: location.coords.latitude })}
               ref={(r) => (userLocationRef.current = r)}
             />
-            { stops.map((e, i) => {
+            {
+            
+            stops.filter((e) => show.includes(e.stopCode)).map((e, i) => {
                 return (
-                  <StopMarker key={`${e.stopCode}-${i}`} stop={e} />
+                  <StopMarker key={`${e.stopCode}-${i}`} onPress={() => showCallback({ code: e.stopCode})} stop={e} />
                 );
-            }) }
+            }) 
+            
+            }
         </MapLibreGL.MapView>
-        <BottomSheet snapPoints={["30%"]}>
+        <BottomSheet snapPoints={[220]}>
           <View style={{ paddingHorizontal: 10, gap: 5, paddingVertical: 10 }}>
             <SearchStops />
             <SearchLines />
@@ -124,9 +202,7 @@ export default function Index() {
   )
 }
 
-function StopMarker({ stop }: { stop: ToplasApi.NearbyStop }) {
-  const [showText, setShowText] = useState(false);
-
+function StopMarker({ stop, onPress }: { stop: ToplasApi.NearbyStop, onPress: () => void }) {
     const styles = StyleSheet.create({
         stopCircle: {
             borderWidth: 3, 
@@ -147,9 +223,7 @@ function StopMarker({ stop }: { stop: ToplasApi.NearbyStop }) {
     return (
         <MapLibreGL.MarkerView coordinate={[stop.coordinates.x, stop.coordinates.y]}>
             <View style={{ flex: 1, flexDirection: "column", alignItems: "center"}}>
-                <TouchableOpacity onPress={() => setShowText(!showText)}>
-                    { !showText && <View style={styles.stopCircle}></View>}
-                    { showText && <>
+                <TouchableOpacity onPress={onPress}>
                       <View style={{ height: 10}}></View>
                       <View style={[styles.stopNameBox, { flexDirection: "row", alignItems: "center" }]}>
                         <View>
@@ -158,7 +232,6 @@ function StopMarker({ stop }: { stop: ToplasApi.NearbyStop }) {
                         </View>
                         <Link href={{ pathname: "/stops/[code]", params: { code: stop.stopCode, name: stop.stopName, direction: stop.direction } }} style={[styles.tc, { paddingLeft: 5 }]}><Ionicons name="arrow-forward-outline" size={24} color="black" /></Link>
                       </View>
-                    </>}
                 </TouchableOpacity>
             </View>
         </MapLibreGL.MarkerView>
