@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TextInput, StyleSheet, Platform, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDebounce } from "use-debounce";
-import Divider from "../components/divider";
+import { useHeaderHeight } from '@react-navigation/elements'
 
 const styles = StyleSheet.create({
     text: {
@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
 export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [debouncedQuery] = useDebounce(query, 300);
+    const height = useHeaderHeight();
 
-    return (<KeyboardAvoidingView style={{ flex: 1}}>
+    return (<KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={height} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Stack.Screen
             options={{
                 title: "Search Lines",

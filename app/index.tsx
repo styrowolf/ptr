@@ -114,7 +114,7 @@ export default function Index() {
                 );
             }) }
         </MapLibreGL.MapView>
-        <BottomSheet snapPoints={["30%"]}>
+        <BottomSheet snapPoints={[220]}>
           <View style={{ paddingHorizontal: 10, gap: 5, paddingVertical: 10 }}>
             <SearchStops />
             <SearchLines />

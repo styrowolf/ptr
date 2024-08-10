@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TextInput, StyleSheet, Platform, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDebounce } from "use-debounce";
+import { useHeaderHeight } from '@react-navigation/elements'
 
 const styles = StyleSheet.create({
     text: {
@@ -47,14 +48,15 @@ const styles = StyleSheet.create({
 export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [debouncedQuery] = useDebounce(query, 300);
+    const height = useHeaderHeight();
 
-    return (<KeyboardAvoidingView style={{ flex: 1}}>
+    return (<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={height}>
         <Stack.Screen
             options={{
                 title: "Search Stops",
             }}
         />
-        <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10}}>
+        <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10, }}>
             <TextInput style={styles.searchBox} placeholder="search by stop name" placeholderTextColor="black" onChangeText={(text) => setQuery(text)}></TextInput>
             <SearchResults query={debouncedQuery}></SearchResults>
         </View>
@@ -79,7 +81,7 @@ function SearchResults({query}: {query: string}) {
     }, [query])
 
     if (data) {
-        return <ScrollView style={{ paddingTop: 10 }}>
+        return <ScrollView style={{ paddingTop: 10, }}>
             {data.map((e) => (<View key={e.stopCode}><SearchItem stop={e}/><View style={{ height: 10 }}/></View>))}
         </ScrollView>;
     } else {
