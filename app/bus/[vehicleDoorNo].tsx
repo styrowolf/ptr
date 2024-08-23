@@ -1,13 +1,12 @@
 import {StyleSheet, View, Image, Text, Touchable, TouchableOpacity, Modal} from 'react-native';
 import MapLibreGL from '@maplibre/maplibre-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ToplasApi, ToplasApiClient } from '@/sdks/typescript';
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
-import { set } from '@/sdks/typescript/core/schemas';
-import { LineInfo } from '@/sdks/typescript/serialization';
 import { ToplasAPICache } from '../storage';
-import { getBounds, getPadding, MAP_PADDING, MAP_STYLE_URL, MAX_ZOOM } from '../utils';
+import { getBounds, getPadding, MAP_PADDING, MAP_STYLE_URL, MAX_ZOOM, selectClosestFeature, stopLayerStyle } from '../utils';
+import * as turf from "@turf/turf";
 
 // Will be null for most users (only Mapbox authenticates this way).
 // Required on Android. See Android installation notes.
@@ -28,6 +27,13 @@ const styles = StyleSheet.create({
   },
 });
 
+function makeGeojson(stops: ToplasApi.LineStop[]) {
+    const geojson = turf.featureCollection(stops.map((stop, index) => {
+      const point = turf.point([stop.coordinates.x, stop.coordinates.y], { stopName: stop.stopName, direction: stop.direction, index: index }, { id: stop.stopCode });
+      return point;
+    }));
+    return geojson;
+}
 
 export default function BusPage() {
     const { vehicleDoorNo, lineCode, routeCode } = useLocalSearchParams();
@@ -41,6 +47,8 @@ export default function BusPage() {
     const [bus, setBus] = useState<ToplasApi.LiveBusIndividual | null>(null);
 
     const bounds = getBounds(routeStops);
+    const [lastTappedStopIndex, setLastTappedStopIndex] = useState<number | null>(null);
+    const geojson = useMemo(() => makeGeojson(routeStops), [routeStops]);
 
     useEffect(() => {
         const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
@@ -96,9 +104,21 @@ export default function BusPage() {
             }}
           />
 
-        { routeStops.map((e, i) => {
+          <MapLibreGL.UserLocation
+              renderMode="native"
+            />
+            <MapLibreGL.ShapeSource id="stops" shape={geojson} hitbox={{ width: 44, height: 44 }} onPress={(e) => setLastTappedStopIndex(selectClosestFeature(e).properties?.index)}>
+                <MapLibreGL.CircleLayer
+                    id="stopCircles"
+                    sourceID="stops"
+                    maxZoomLevel={20}
+                    minZoomLevel={0}
+                    style={stopLayerStyle} />
+            </MapLibreGL.ShapeSource>
+
+        { routeStops.filter((e, i) => lastTappedStopIndex == i).map((e, i) => {
             return (
-              <StopMarker key={`${e.stopCode}-${i}`} stop={e} />
+              <StopMarker onPress={() => setLastTappedStopIndex(null)} key={`${e.stopCode}-${i}`} stop={e} />
             );
         }) }
         { bus && <BusMarker bus={bus} /> }
@@ -107,9 +127,7 @@ export default function BusPage() {
     );
 }
 
-function StopMarker({ stop }: { stop: ToplasApi.LineStop }) {
-    const [showText, setShowText] = useState(false);
-
+function StopMarker({ stop, onPress }: { stop: ToplasApi.LineStop, onPress?: () => void }) {
     const styles = StyleSheet.create({
         stopCircle: {
             borderWidth: 3, 
@@ -127,9 +145,8 @@ function StopMarker({ stop }: { stop: ToplasApi.LineStop }) {
     return (
         <MapLibreGL.MarkerView coordinate={[stop.coordinates.x, stop.coordinates.y]}>
             <View style={{ flex: 1, flexDirection: "column", alignItems: "center"}}>
-                <TouchableOpacity onPress={() => setShowText(!showText)}>
-                    { !showText && <View style={styles.stopCircle}></View>}
-                    { showText && <><View style={{ height: 10}}></View><View style={styles.stopNameBox}><Text>{stop.stopName}</Text></View></>}
+                <TouchableOpacity onPress={onPress}>
+                    <View style={{ height: 10}}></View><View style={styles.stopNameBox}><Text>{stop.stopName}</Text></View>
                 </TouchableOpacity>
             </View>
         </MapLibreGL.MarkerView>

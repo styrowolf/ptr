@@ -20,6 +20,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@gorhom/bottom-sheet": "^4.6.4",
     "@maplibre/maplibre-react-native": "^10.0.0-alpha.10",
+    "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.0.2",
     "@turf/turf": "^7.0.0",
     "expo": "~51.0.23",

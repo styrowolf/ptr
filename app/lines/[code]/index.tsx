@@ -1,4 +1,4 @@
-import { ToplasApiClient, ToplasApi } from "@/sdks/typescript";
+import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Platform, TouchableOpacity } from "react-native";
@@ -7,8 +7,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { FontAwesome5, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import Divider from "@/app/components/divider";
-import { ToplasAPICache } from "@/app/storage";
+import { ToplasAPICache, ToplasPreferences } from "@/app/storage";
 import { isOppositeDirection } from "@/app/utils";
+import { ToplasDataProvider } from "@/app/provider";
 
 const styles = StyleSheet.create({
     title: {
@@ -48,7 +49,7 @@ interface StopWithBus extends ToplasApi.LineStop {
 }
 
 export default function LinePage() {
-    const { code, name, routeCode } = useLocalSearchParams();
+    const { code, routeCode } = useLocalSearchParams();
 
     const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(null);
     const [error, setError] = useState(null);
@@ -57,9 +58,13 @@ export default function LinePage() {
     const [liveBuses, setLiveBuses] = useState<ToplasApi.LiveBus[]>([]);
 
     useEffect(() => {
-        const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
+        if (lineInfo && selectedRoute) {
+            ToplasPreferences.appendRecentLine({ lineCode: code as string, routeCode: selectedRoute.routeCode });
+        }
+    }, [selectedRoute]);
 
-        const lineInfo = client.lineInfo(code as string);
+    useEffect(() => {
+        const lineInfo = ToplasDataProvider.getLineInfo(code as string);
 
         lineInfo.then((val) => {
             ToplasAPICache.setLineInfo(code as string, val);
@@ -73,7 +78,7 @@ export default function LinePage() {
         }).catch(setError);
 
         function getLiveData() {
-            const liveData = client.liveBusesOnRoute(code as string);
+            const liveData = ToplasDataProvider.getLiveBusesOnLine(code as string);
             
             liveData.then((val) => { 
                 ToplasAPICache.setLiveBuses(code as string, val);
@@ -86,7 +91,7 @@ export default function LinePage() {
         return () => clearInterval(id);
     }, []);
 
-    if (lineInfo) {
+    if (lineInfo && selectedRoute) {
         const stops: StopWithBus[] = selectedRoute!.stops;
         const buses = liveBuses.filter((e) => e.routeCode == selectedRoute?.routeCode);
         const oppositeRoute = lineInfo.routes.find((e) => isOppositeDirection(selectedRoute!, e));
@@ -126,11 +131,24 @@ export default function LinePage() {
                 <Divider height={20}/>
                 <Text style={styles.text}>Stops</Text>
                 <ScrollView style={{ paddingBottom: 10}}>
-                    { stops.map((e, i) => (<Text style={styles.stopItem} key={`${e.stopCode}-${i}`}><Link href={{ pathname: "/stops/[code]", params: { code: e.stopCode, name: e.stopName, direction: e.direction }}}>{i + 1}. {e.stopName}</Link> {e.bus ? <Link href={{ pathname: "/bus/[vehicleDoorNo]", params: { vehicleDoorNo: e.bus.vehicleDoorNo, lineCode: e.lineCode, routeCode: e.routeCode }}}><FontAwesome6 name="bus-simple" size={16} />{e.bus.stopEnterTime ? ` (${e.bus.stopEnterTime})` : ""}</Link>: ""}</Text>)) }
+                    { stops.map((e, i) => (<Text style={styles.stopItem} key={`${e.stopCode}-${i}`}><Link onPress={() => { ToplasPreferences.appendRecentStop(e); }} href={{ pathname: "/stops/[code]", params: { code: e.stopCode, name: e.stopName, direction: e.direction }}}>{i + 1}. {e.stopName}</Link> {e.bus ? <Link href={{ pathname: "/bus/[vehicleDoorNo]", params: { vehicleDoorNo: e.bus.vehicleDoorNo, lineCode: e.lineCode, routeCode: e.routeCode }}}><FontAwesome6 name="bus-simple" size={16} />{e.bus.stopEnterTime ? ` (${e.bus.stopEnterTime})` : ""}</Link>: ""}</Text>)) }
                 </ScrollView>
             </View>
             
         </SafeAreaView>)
+    } else if (lineInfo && !selectedRoute) {
+        return (<SafeAreaView style={styles.view}>
+            <Stack.Screen
+                options={{
+                    title: `${code}`,
+                }}
+            />
+            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
+                <Text style={styles.title}>{code}</Text>
+                <Divider height={20}/>
+                <Text style={styles.text}>No routes found for this line.</Text>
+            </View>
+        </SafeAreaView>);
     } else if (error) {
         return (<SafeAreaView style={styles.view}>
             <Stack.Screen
@@ -158,5 +176,4 @@ export default function LinePage() {
             </View>
         </SafeAreaView>)
     }
-    
 }

@@ -1,6 +1,7 @@
 import Divider from "@/app/components/divider";
-import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { ToplasDataProvider } from "@/app/provider";
+import { ToplasApi } from "@/sdks/typescript";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, ScrollView, Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -31,8 +32,7 @@ export default function Announcements() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
-        client.lineAnnouncementsLiveLineLineCodeAnnouncementsGet(code as string).then((val) => { setAnnouncements(val) }).catch(setError);
+        ToplasDataProvider.getLineAnnouncements(code as string).then((val) => { setAnnouncements(val) }).catch(setError);
     }, []);
     
     if (error) {

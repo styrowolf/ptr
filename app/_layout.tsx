@@ -5,7 +5,7 @@ import MapLibreGL from '@maplibre/maplibre-react-native';
 import React, { useEffect, useReducer, useState } from "react";
 import { useFonts } from "expo-font";
 import { IBMPlexMono_700Bold_Italic } from '@expo-google-fonts/ibm-plex-mono';
-import { ToplasAPICache } from "./storage";
+import { ToplasAPICache, ToplasPreferences } from "./storage";
 
 SplashScreen.preventAutoHideAsync();
 

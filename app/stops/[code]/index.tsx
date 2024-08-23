@@ -1,15 +1,13 @@
-import { ToplasApiClient, ToplasApi } from "@/sdks/typescript";
+import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, Platform, TouchableOpacity } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
+import { View, Text, SafeAreaView, StyleSheet, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { FontAwesome5, Octicons } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
 import Divider from "@/app/components/divider";
 import { arrayPad, chunkArray } from "../../utils";
-import { set } from "@/sdks/typescript/core/schemas";
-import { ToplasAPICache } from "../../storage";
+import { ToplasAPICache, ToplasPreferences } from "../../storage";
+import { ToplasDataProvider } from "@/app/provider";
 
 const styles = StyleSheet.create({
     title: {
@@ -54,9 +52,7 @@ export default function StopPage() {
     const [arrivals, setArrivals] = useState<ToplasApi.Arrival[]>([]);
 
     useEffect(() => {
-        const client = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"});
-
-        const stopInfo = client.stopInfo(Number(code));
+        const stopInfo = ToplasDataProvider.getStopInfo(Number(code));
 
         stopInfo.then((val) => {
             ToplasAPICache.setStopInfo(code as string, val);
@@ -64,7 +60,7 @@ export default function StopPage() {
         }).catch(setError);
 
         function getLiveData() {
-            const liveData = client.stopArrivals(Number(code));
+            const liveData = ToplasDataProvider.getArrivals(Number(code));
             
             liveData.then((val) => { 
                 ToplasAPICache.setArrivals(code as string, val)
@@ -96,7 +92,7 @@ export default function StopPage() {
                     <Text style={styles.text}>Lines</Text>
                     {chunkedLines.map((chunk, i) => (
                         <View key={`${chunk.map((e) => e.routeCode).join("-")}-${i}`} style={{ flexDirection: "row" }}>
-                            {arrayPad(chunk, 4, (<View style={{ flex: 1}}></View>)).map((line) => (<Link style={[{ flex: 1 }, styles.linesTableText]} href={{ pathname: "/lines/[code]", params: { code: line.lineCode } }}>{line.lineCode}</Link>))}
+                            {arrayPad(chunk, 4, (<View style={{ flex: 1 }}></View>)).map((line: ToplasApi.LineOnStop) => (<Link style={[{ flex: 1 }, styles.linesTableText]} onPress={() => ToplasPreferences.appendRecentLine({ lineCode: line.lineCode, routeCode: line.routeCode })} href={{ pathname: "/lines/[code]", params: { code: line.lineCode, routeCode: line.routeCode } }}>{line.lineCode}</Link>))}
                         </View>
                     ))}
                 </View>
@@ -110,7 +106,7 @@ export default function StopPage() {
                 <ScrollView style={{ paddingBottom: 10 }}>
                     {arrivals.map((arrival, i) => (
                         <View key={`${arrival.routeCode}-${i}`} style={{ flexDirection: "row" }}>
-                            <Text style={[{ flex: 3 }, styles.linesTableText]}><Link href={{ pathname: "/lines/[code]", params: { code: arrival.lineCode, routeCode: arrival.routeCode }}}>{arrival.lineCode}</Link></Text>
+                            <Text style={[{ flex: 3 }, styles.linesTableText]}><Link onPress={() => ToplasPreferences.appendRecentLine({ lineCode: arrival.lineCode, routeCode: arrival.routeCode }) } href={{ pathname: "/lines/[code]", params: { code: arrival.lineCode, routeCode: arrival.routeCode }}}>{arrival.lineCode}</Link></Text>
                             <Text style={[{ flex: 12 }, styles.arrivalItem]} numberOfLines={1} ellipsizeMode="tail"><Link href={{ pathname: "/bus/[vehicleDoorNo]", params: { vehicleDoorNo: arrival.vehicleDoorNo, lineCode: arrival.lineCode, routeCode: arrival.routeCode }}}>{arrival.lineName}</Link></Text>
                             <Text style={[{ flex: 2 }, styles.arrivalItem]}>{arrival.minutesUntilArrival}</Text>
                         </View>

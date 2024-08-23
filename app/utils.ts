@@ -1,5 +1,6 @@
 import { ToplasApi } from "@/sdks/typescript";
 import MapLibreGL from "@maplibre/maplibre-react-native";
+import OnPressEvent from "@maplibre/maplibre-react-native/javascript/types/OnPressEvent";
 
 export function chunkArray<T>(array: T[], chunkSize: number): T[][] {
     const chunks = [];
@@ -66,3 +67,31 @@ export function getBounds(stops: ToplasApi.LineStop[]): MapLibreGL.CameraBounds 
 export function getPadding(padding: number): MapLibreGL.CameraPadding {
     return { paddingBottom: padding, paddingLeft: padding, paddingRight: padding, paddingTop: padding };
 }
+
+export function selectClosestFeature(onPressEvent: OnPressEvent): GeoJSON.Feature {
+    let minDist = 0;
+    let closestFeature = null;
+    
+    onPressEvent.features.forEach((feature) => {
+      // @ts-ignore
+      const x = feature.geometry.coordinates[0];
+      // @ts-ignore
+      const y = feature.geometry.coordinates[1];
+
+      // @ts-ignore
+      const dist = (onPressEvent.coordinates.longitude - x) ** 2 + (onPressEvent.coordinates.latitude - y) ** 2;
+      if (minDist == 0 || dist < minDist) {
+        minDist = dist;
+        closestFeature = feature;
+      }
+    });
+    // @ts-ignore
+    return closestFeature;
+  }
+
+export const stopLayerStyle = {
+    circleRadius: 8,
+    circleColor: "white",
+    circleStrokeColor: "black",
+    circleStrokeWidth: 3,
+} satisfies MapLibreGL.CircleLayerStyle;

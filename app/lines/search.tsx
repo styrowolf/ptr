@@ -1,5 +1,4 @@
-import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
-import { set } from "@/sdks/typescript/core/schemas";
+import { ToplasApi } from "@/sdks/typescript";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -7,10 +6,16 @@ import { View, Text, SafeAreaView, TextInput, StyleSheet, Platform, TouchableOpa
 import { ScrollView } from "react-native-gesture-handler";
 import { useDebounce } from "use-debounce";
 import { useHeaderHeight } from '@react-navigation/elements'
+import { ToplasDataProvider } from "../provider";
+import { ToplasPreferences } from "../storage";
 
 const styles = StyleSheet.create({
     text: {
         fontSize: 20,
+        fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
+    },
+    errorText: {
+        fontSize: 16,
         fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
     },
     searchBox: {
@@ -72,25 +77,27 @@ function SearchResults({query}: {query: string}) {
             setData([]);
             return;
         }
-        const lines = new ToplasApiClient({ environment: () => "https://toplas.kurt.town/api"}).searchRoute({
-            query,
-        });
+        const lines = ToplasDataProvider.searchLines(query);
         lines.then((val) => {
             setData(val);
         }).catch(setError);
     }, [query])
 
     if (data) {
+        // TODO: same as TODO in stops/search.tsx 
         return <ScrollView style={{ paddingTop: 10, }}>
             {data.map((e, i) => (<View key={`${e.lineCode}-${i}`}><SearchItem line={e}/><View style={{ height: 10 }}/></View>))}
         </ScrollView>;
     } else {
-        return <Text>Error</Text>
+        return <Text style={[styles.errorText, { marginTop: 10 }]}>Searching for lines is not possible at this moment.</Text>
     }
 }
 
 function SearchItem({ line }: { line: ToplasApi.Line }) {
-    return <TouchableOpacity onPress={() => router.push({ pathname: "/lines/[code]", params: { code: line.lineCode, name: line.lineName } })}>
+    return <TouchableOpacity onPress={() => {
+            router.push({ pathname: "/lines/[code]", params: { code: line.lineCode, name: line.lineName } });
+            ToplasPreferences.appendRecentLine(line);
+        }}>
         <View style={styles.searchItemView}>
             <View style={{ flex: 2 }}>
                 <FontAwesome6 style={{}} name="bus-simple" size={24} />
