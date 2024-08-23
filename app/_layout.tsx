@@ -1,10 +1,10 @@
 import { Stack } from "expo-router";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import MapLibreGL from '@maplibre/maplibre-react-native';
+import MapLibreGL from "@maplibre/maplibre-react-native";
 import React, { useEffect, useReducer, useState } from "react";
 import { useFonts } from "expo-font";
-import { IBMPlexMono_700Bold_Italic } from '@expo-google-fonts/ibm-plex-mono';
+import { IBMPlexMono_700Bold_Italic } from "@expo-google-fonts/ibm-plex-mono";
 import { ToplasAPICache, ToplasPreferences } from "./storage";
 
 SplashScreen.preventAutoHideAsync();
@@ -15,7 +15,7 @@ MapLibreGL.setAccessToken(null);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    'IBMPlexMono-BI': IBMPlexMono_700Bold_Italic,
+    "IBMPlexMono-BI": IBMPlexMono_700Bold_Italic,
   });
 
   useEffect(() => {
@@ -30,18 +30,21 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <Stack screenOptions={{
-        headerBackTitleVisible: false,
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontFamily: "IBMPlexMono-BI",
-          color: 'white',
-        },}}>
-        <Stack.Screen name="index" options={{title: "toplaş"}}/>
+      <Stack
+        screenOptions={{
+          headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: "#f4511e",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontFamily: "IBMPlexMono-BI",
+            color: "white",
+          },
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: "toplaş" }} />
         <Stack.Screen name="nearbyStops" />
         <Stack.Screen name="stops/[code]/index" />
         <Stack.Screen name="stops/[code]/announcements" />
