@@ -76,7 +76,7 @@ export default function StopPage() {
 
     const id = setInterval(getLiveData, 20000);
     return () => clearInterval(id);
-  }, []);
+  }, [code]);
 
   if (stopInfo) {
     const chunkedLines = chunkArray(stopInfo.lines, 4);
@@ -91,7 +91,7 @@ export default function StopPage() {
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.subtitle}>Direction: {direction}</Text>
           <Divider height={20} />
-          <Link
+          <Link push
             href={{
               pathname: "/stops/[code]/announcements",
               params: {
@@ -114,7 +114,7 @@ export default function StopPage() {
               >
                 {arrayPad(chunk, 4, <View style={{ flex: 1 }}></View>).map(
                   (line: ToplasApi.LineOnStop) => (
-                    <Link
+                    <Link push
                       style={[{ flex: 1 }, styles.linesTableText]}
                       onPress={() =>
                         ToplasPreferences.appendRecentLine({
@@ -151,7 +151,7 @@ export default function StopPage() {
                 style={{ flexDirection: "row" }}
               >
                 <Text style={[{ flex: 3 }, styles.linesTableText]}>
-                  <Link
+                  <Link push
                     onPress={() =>
                       ToplasPreferences.appendRecentLine({
                         lineCode: arrival.lineCode,
@@ -174,7 +174,7 @@ export default function StopPage() {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  <Link
+                  <Link push
                     href={{
                       pathname: "/bus/[vehicleDoorNo]",
                       params: {

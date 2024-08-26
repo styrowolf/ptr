@@ -88,9 +88,9 @@ export default function LinePage() {
         if (routeCode) {
           const route = val.routes.find((e) => e.routeCode == routeCode)!;
           setSelectedRoute(route);
-        } else {
+        } else if (val.routes.length > 0) {
           setSelectedRoute(val.routes[0]);
-        }
+        } 
         setLineInfo(val);
       })
       .catch(setError);
@@ -109,7 +109,7 @@ export default function LinePage() {
 
     const id = setInterval(getLiveData, 20000);
     return () => clearInterval(id);
-  }, []);
+  }, [code]);
 
   if (lineInfo && selectedRoute) {
     const stops: StopWithBus[] = selectedRoute!.stops;
@@ -166,7 +166,7 @@ export default function LinePage() {
           </View>
           <Divider height={20} />
           <View style={{ flexDirection: "row" }}>
-            <Link
+            <Link push
               href={{
                 pathname: "/lines/[code]/map",
                 params: {
@@ -180,7 +180,7 @@ export default function LinePage() {
               <View style={{ width: 10 }} />
               <FontAwesome5 name="map" size={16} />
             </Link>
-            <Link
+            <Link push
               href={{
                 pathname: "/lines/[code]/schedule",
                 params: {
@@ -194,7 +194,7 @@ export default function LinePage() {
               <View style={{ width: 10 }} />
               <FontAwesome5 name="clock" size={16} />
             </Link>
-            <Link
+            <Link push
               href={{
                 pathname: "/lines/[code]/announcements",
                 params: { code: code as string, name: lineInfo.lineName },
@@ -209,7 +209,7 @@ export default function LinePage() {
           <ScrollView style={{ paddingBottom: 10 }}>
             {stops.map((e, i) => (
               <Text style={styles.stopItem} key={`${e.stopCode}-${i}`}>
-                <Link
+                <Link push
                   onPress={() => {
                     ToplasPreferences.appendRecentStop(e);
                   }}
@@ -225,7 +225,7 @@ export default function LinePage() {
                   {i + 1}. {e.stopName}
                 </Link>{" "}
                 {e.bus ? (
-                  <Link
+                  <Link push
                     href={{
                       pathname: "/bus/[vehicleDoorNo]",
                       params: {

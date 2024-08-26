@@ -48,3 +48,7 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Invariants
+
+Stop and Line pages assume that the local parameters do not change. Always "push" `expo-navigation` Stop and Line page routes rather than "navigate".
