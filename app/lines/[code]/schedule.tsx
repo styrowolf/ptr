@@ -4,6 +4,7 @@ import { chunkArray } from "@/app/utils";
 import { ToplasApi } from "@/sdks/typescript";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   View,
   Text,
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SchedulePage() {
+  const { t } = useTranslation([], { keyPrefix: "lineSchedule" });
   const { code, routeCode } = useLocalSearchParams();
   const [dayType, setDayType] = useState<ToplasApi.DayType>(
     ToplasApi.DayType.WorkingDay,
@@ -71,7 +73,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.WorkingDay && styles.selected,
             ]}
           >
-            Weekdays
+            {t('weekdays')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -84,7 +86,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.Saturday && styles.selected,
             ]}
           >
-            Saturday
+            {t('saturday')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -97,7 +99,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.Sunday && styles.selected,
             ]}
           >
-            Sunday
+            {t('sunday')}
           </Text>
         </TouchableOpacity>
       </View>

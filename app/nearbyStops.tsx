@@ -24,6 +24,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ToplasDataProvider } from "./provider";
 import { ToplasPreferences } from "./storage";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   text: {
@@ -78,6 +79,7 @@ function differentEnough(a: ToplasApi.Coordinates, b: ToplasApi.Coordinates) {
 }
 
 export default function NearbyStops() {
+  const { t } = useTranslation([], { keyPrefix: "nearbyStops" });
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const userLocationRef = useRef<MapLibreGL.UserLocationRef | null>();
   const cameraRef = useRef<MapLibreGL.CameraRef | null>();
@@ -121,7 +123,7 @@ export default function NearbyStops() {
 
   return (
     <View style={styles.view}>
-      <Stack.Screen options={{ title: "Nearby Stops" }} />
+      <Stack.Screen options={{ title: t('title') }} />
       <MapLibreGL.MapView
         style={styles.map}
         logoEnabled={true}
@@ -212,6 +214,7 @@ function SearchItem({
   stop: ToplasApi.NearbyStop;
   isSelected?: boolean;
 }) {
+  const { t } = useTranslation([], { keyPrefix: "nearbyStops" });
   const styles = StyleSheet.create({
     stopName: {
       fontSize: 20,
@@ -267,7 +270,7 @@ function SearchItem({
         />
         <View>
           <Text style={styles.stopName}>{stop.stopName}</Text>
-          <Text style={styles.subtitle}>Direction: {stop.direction}</Text>
+          <Text style={styles.subtitle}>{t('direction')}: {stop.direction}</Text>
         </View>
       </View>
     </TouchableOpacity>

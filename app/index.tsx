@@ -21,6 +21,7 @@ import { LineWithRoute, StopWithoutId, ToplasPreferences } from "./storage";
 import { arrayPad, chunkArray } from "./utils";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
+import { useTranslation } from "react-i18next"
 
 const styles = StyleSheet.create({
   text: {
@@ -92,6 +93,7 @@ export default function Index() {
 
 function RecentsWidget() {
   const pathname = usePathname();
+  const { t } = useTranslation([], { keyPrefix: "home" });
 
   const [recentLines, setRecentLines] = useState<LineWithRoute[]>(
     ToplasPreferences.getRecentLines(),
@@ -129,7 +131,7 @@ function RecentsWidget() {
               size={24}
               style={{ width: 44, padding: "auto" }}
             />
-            <Text style={styles.subtitle}>nearby stops</Text>
+            <Text style={styles.subtitle}>{t('nearbyStops')}</Text>
           </View>
         </TouchableOpacity>
         <Divider height={20} />
@@ -140,7 +142,7 @@ function RecentsWidget() {
               size={24}
               style={{ width: 44, paddingLeft: 2, alignSelf: "center" }}
             />
-            <Text style={styles.subtitle}>find lines</Text>
+            <Text style={styles.subtitle}>{t('findLines')}</Text>
           </View>
         </TouchableOpacity>
         <Divider height={20} />
@@ -151,12 +153,12 @@ function RecentsWidget() {
               size={24}
               style={{ width: 44, paddingLeft: 6, alignSelf: "center" }}
             />
-            <Text style={styles.subtitle}>find stops</Text>
+            <Text style={styles.subtitle}>{t('findStops')}</Text>
           </View>
         </TouchableOpacity>
       </View>
       <Text style={[styles.title, { paddingTop: 10 }]}>
-        Recents <FontAwesome name="history" size={24} />
+        {t('recents')} <FontAwesome name="history" size={24} />
       </Text>
       <Divider height={20} />
       <RecentLines lines={recentLines} />
@@ -178,7 +180,7 @@ function RecentsWidget() {
               }}
             >
               <Text style={styles.stopTitle}>{e.stopName}</Text>
-              <Text style={styles.stopSubtitle}>Direction: {e.direction}</Text>
+              <Text style={styles.stopSubtitle}>{t('direction')}: {e.direction}</Text>
             </TouchableOpacity>
           </View>
         ))}

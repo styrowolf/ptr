@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import MapLibreGL from "@maplibre/maplibre-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
+import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { ToplasAPICache } from "../storage";
@@ -23,6 +23,8 @@ import {
   stopLayerStyle,
 } from "../utils";
 import * as turf from "@turf/turf";
+import { ToplasDataProvider } from "../provider";
+import { useTranslation } from "react-i18next";
 
 // Will be null for most users (only Mapbox authenticates this way).
 // Required on Android. See Android installation notes.
@@ -58,6 +60,7 @@ function makeGeojson(stops: ToplasApi.LineStop[]) {
 }
 
 export default function BusPage() {
+  const { t } = useTranslation([], { keyPrefix: "bus" });
   const { vehicleDoorNo, lineCode, routeCode } = useLocalSearchParams();
 
   const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(
@@ -78,12 +81,8 @@ export default function BusPage() {
   const geojson = useMemo(() => makeGeojson(routeStops), [routeStops]);
 
   useEffect(() => {
-    const client = new ToplasApiClient({
-      environment: () => "https://toplas.kurt.town/api",
-    });
-
     if (!lineInfo) {
-      const lineInfo = client.lineInfo(lineCode as string);
+      const lineInfo = ToplasDataProvider.getLineInfo(lineCode as string);
 
       lineInfo.then((val) => {
         ToplasAPICache.setLineInfo(lineCode as string, val);
@@ -91,7 +90,7 @@ export default function BusPage() {
       });
     }
     function getLiveData() {
-      const bus = client.busLocationLiveBusVehicleDoorNoGet(
+      const bus = ToplasDataProvider.getLiveBusByVehicleDoorNo(
         vehicleDoorNo as string,
       );
       bus.then((val) => {
@@ -119,7 +118,7 @@ export default function BusPage() {
     <View style={styles.page}>
       <Stack.Screen
         options={{
-          title: `Bus ${vehicleDoorNo}`,
+          title: `${t('bus')} ${vehicleDoorNo}`,
         }}
       />
       <MapLibreGL.MapView

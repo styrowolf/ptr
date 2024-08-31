@@ -8,6 +8,7 @@ import Divider from "@/app/components/divider";
 import { arrayPad, chunkArray } from "../../utils";
 import { ToplasAPICache, ToplasPreferences } from "../../storage";
 import { ToplasDataProvider } from "@/app/provider";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   title: {
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
 });
 
 export default function StopPage() {
+  const { t } = useTranslation([], { keyPrefix: "stops" });
   const { code, name, direction } = useLocalSearchParams();
 
   const [stopInfo, setStopInfo] = useState<ToplasApi.StopInfo | null>(null);
@@ -89,7 +91,7 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>Direction: {direction}</Text>
+          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
           <Divider height={20} />
           <Link push
             href={{
@@ -102,11 +104,11 @@ export default function StopPage() {
             }}
             style={[styles.text]}
           >
-            Announcements <Octicons name="report" size={16} color="black" />
+            {t('announcements')} <Octicons name="report" size={16} color="black" />
           </Link>
           <Divider height={20} />
           <View>
-            <Text style={styles.text}>Lines</Text>
+            <Text style={styles.text}>{t('lines')}</Text>
             {chunkedLines.map((chunk, i) => (
               <View
                 key={`${chunk.map((e) => e.routeCode).join("-")}-${i}`}
@@ -138,11 +140,11 @@ export default function StopPage() {
             ))}
           </View>
           <Divider height={20} />
-          <Text style={[styles.text, { paddingBottom: 5 }]}>Arrivals</Text>
+          <Text style={[styles.text, { paddingBottom: 5 }]}>{t('arrivals')}</Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={[{ flex: 3 }, styles.arrivalsHeader]}>Line</Text>
-            <Text style={[{ flex: 12 }, styles.arrivalsHeader]}>Line Name</Text>
-            <Text style={[{ flex: 2 }, styles.arrivalsHeader]}>mins</Text>
+            <Text style={[{ flex: 3 }, styles.arrivalsHeader]}>{t('line')}</Text>
+            <Text style={[{ flex: 12 }, styles.arrivalsHeader]}>{t('lineName')}</Text>
+            <Text style={[{ flex: 2 }, styles.arrivalsHeader]}>{t('mins')}</Text>
           </View>
           <ScrollView style={{ paddingBottom: 10 }}>
             {arrivals.map((arrival, i) => (
@@ -206,10 +208,10 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>Direction: {direction}</Text>
+          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
           <Divider height={20} />
           <Text style={styles.text}>
-            Stop information cannot be retrieved at the moment.
+            {t('stopInformationUnavailable')}
           </Text>
         </View>
       </SafeAreaView>
@@ -224,9 +226,9 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>Direction: {direction}</Text>
+          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>Loading...</Text>
+          <Text style={styles.text}>{t('loading')}</Text>
         </View>
       </SafeAreaView>
     );

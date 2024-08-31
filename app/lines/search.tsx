@@ -17,6 +17,7 @@ import { useDebounce } from "use-debounce";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { ToplasDataProvider } from "../provider";
 import { ToplasPreferences } from "../storage";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   text: {
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SearchPage() {
+  const { t } = useTranslation([], { keyPrefix: "searchLines" });
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const height = useHeaderHeight();
@@ -72,13 +74,13 @@ export default function SearchPage() {
     >
       <Stack.Screen
         options={{
-          title: "Search Lines",
+          title: t('title'),
         }}
       />
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
         <TextInput
           style={styles.searchBox}
-          placeholder="search by line name or code"
+          placeholder={t('searchPlaceholder')}
           placeholderTextColor="black"
           onChangeText={(text) => setQuery(text)}
         ></TextInput>
@@ -89,6 +91,7 @@ export default function SearchPage() {
 }
 
 function SearchResults({ query }: { query: string }) {
+  const { t } = useTranslation([], { keyPrefix: "searchLines" });
   const [data, setData] = useState<ToplasApi.Line[] | null>(null);
   const [error, setError] = useState(null);
 
@@ -120,7 +123,7 @@ function SearchResults({ query }: { query: string }) {
   } else {
     return (
       <Text style={[styles.errorText, { marginTop: 10 }]}>
-        Searching for lines is not possible at this moment.
+        {t('searchNotPossible')}
       </Text>
     );
   }

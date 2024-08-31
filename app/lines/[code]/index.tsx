@@ -22,6 +22,7 @@ import Divider from "@/app/components/divider";
 import { ToplasAPICache, ToplasPreferences } from "@/app/storage";
 import { isOppositeDirection } from "@/app/utils";
 import { ToplasDataProvider } from "@/app/provider";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   title: {
@@ -61,6 +62,8 @@ interface StopWithBus extends ToplasApi.LineStop {
 }
 
 export default function LinePage() {
+  const { t, i18n } = useTranslation([], { keyPrefix: "lines" });
+  const flexValues = i18n.resolvedLanguage == "tr" ? [6, 7, 7] : [2, 3, 4];
   const { code, routeCode } = useLocalSearchParams();
 
   const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(null);
@@ -139,12 +142,12 @@ export default function LinePage() {
             {code} ({lineInfo.lineName})
           </Text>
           <Divider height={20} />
-          <Text style={styles.text}>Route</Text>
+          <Text style={styles.text}>{t('route')}</Text>
           <View style={{ flexDirection: "row" }}>
             <Dropdown
               style={{ flex: 1 }}
               placeholderStyle={styles.dropdownText}
-              placeholder="Route"
+              placeholder={t('route')}
               itemTextStyle={styles.dropdownText}
               selectedTextStyle={styles.dropdownText}
               value={selectedRoute!.routeCode}
@@ -174,9 +177,9 @@ export default function LinePage() {
                   routeCode: selectedRoute?.routeCode,
                 },
               }}
-              style={[styles.text, { flex: 2 }]}
+              style={[styles.text, { flex: flexValues[0] }]}
             >
-              Map
+              {t('map')}
               <View style={{ width: 10 }} />
               <FontAwesome5 name="map" size={16} />
             </Link>
@@ -188,9 +191,9 @@ export default function LinePage() {
                   routeCode: selectedRoute?.routeCode,
                 },
               }}
-              style={[styles.text, { flex: 3 }]}
+              style={[styles.text, { flex: flexValues[1] }]}
             >
-              Schedule
+              {t('schedule')}
               <View style={{ width: 10 }} />
               <FontAwesome5 name="clock" size={16} />
             </Link>
@@ -199,13 +202,13 @@ export default function LinePage() {
                 pathname: "/lines/[code]/announcements",
                 params: { code: code as string, name: lineInfo.lineName },
               }}
-              style={[styles.text, { flex: 4 }]}
+              style={[styles.text, { flex: flexValues[2] }]}
             >
-              Announcements <Octicons name="report" size={16} color="black" />
+              {t('announcements')} <Octicons name="report" size={16} color="black" />
             </Link>
           </View>
           <Divider height={20} />
-          <Text style={styles.text}>Stops</Text>
+          <Text style={styles.text}>{t('stops')}</Text>
           <ScrollView style={{ paddingBottom: 10 }}>
             {stops.map((e, i) => (
               <Text style={styles.stopItem} key={`${e.stopCode}-${i}`}>
@@ -258,7 +261,7 @@ export default function LinePage() {
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>No routes found for this line.</Text>
+          <Text style={styles.text}>{t('noRoutesFound')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -274,7 +277,7 @@ export default function LinePage() {
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
           <Text style={styles.text}>
-            Line information cannot be retrieved at the moment.
+            {t('lineInformationUnavailable')}
           </Text>
         </View>
       </SafeAreaView>
@@ -290,7 +293,7 @@ export default function LinePage() {
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>Loading...</Text>
+          <Text style={styles.text}>{t('loading')}</Text>
         </View>
       </SafeAreaView>
     );

@@ -17,6 +17,7 @@ import { useDebounce } from "use-debounce";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { ToplasDataProvider } from "../provider";
 import { ToplasPreferences } from "../storage";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   text: {
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SearchPage() {
+  const { t } = useTranslation([], { keyPrefix: "searchStops" });
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const height = useHeaderHeight();
@@ -72,13 +74,13 @@ export default function SearchPage() {
     >
       <Stack.Screen
         options={{
-          title: "Search Stops",
+          title: t('title'),
         }}
       />
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
         <TextInput
           style={styles.searchBox}
-          placeholder="search by stop name"
+          placeholder={t('searchPlaceholder')}
           placeholderTextColor="black"
           onChangeText={(text) => setQuery(text)}
         ></TextInput>
@@ -89,6 +91,7 @@ export default function SearchPage() {
 }
 
 function SearchResults({ query }: { query: string }) {
+  const { t } = useTranslation([], { keyPrefix: "searchStops" });
   const [data, setData] = useState<ToplasApi.Stop[] | null>(null);
   const [error, setError] = useState(null);
 
@@ -120,13 +123,14 @@ function SearchResults({ query }: { query: string }) {
   } else {
     return (
       <Text style={[styles.errorText, { marginTop: 10 }]}>
-        Searching for stops is not possible at this moment.
+        {t('searchNotPossible')}
       </Text>
     );
   }
 }
 
 function SearchItem({ stop }: { stop: ToplasApi.Stop }) {
+  const { t } = useTranslation([], { keyPrefix: "searchStops" });
   return (
     <TouchableOpacity
       onPress={() => {
@@ -150,7 +154,7 @@ function SearchItem({ stop }: { stop: ToplasApi.Stop }) {
         />
         <View>
           <Text style={styles.stopName}>{stop.stopName}</Text>
-          <Text style={styles.subtitle}>Direction: {stop.direction}</Text>
+          <Text style={styles.subtitle}>{t('direction')}: {stop.direction}</Text>
         </View>
       </View>
     </TouchableOpacity>

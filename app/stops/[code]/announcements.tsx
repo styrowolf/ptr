@@ -3,6 +3,7 @@ import { ToplasDataProvider } from "@/app/provider";
 import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, ScrollView, Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Announcements() {
+  const { t } = useTranslation([], { keyPrefix: "stopAnnouncements" });
   const insets = useSafeAreaInsets();
   const { code, name, direction } = useLocalSearchParams();
 
@@ -58,38 +60,38 @@ export default function Announcements() {
   if (error) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: `Announcements` }} />
+        <Stack.Screen options={{ title: t('title')}} />
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.subtitle}>Direction: {direction}</Text>
         <Divider height={20} />
         <Text style={styles.announcementItem}>
-          Announcements for this stop cannot be retrieved at the moment.
+          {t('announcementsUnavailable')}
         </Text>
       </View>
     );
   } else if (announcements?.length === 0) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: `Announcements` }} />
+        <Stack.Screen options={{ title: t('title') }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>Direction: {direction}</Text>
+        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
         <Divider height={20} />
         <Text style={styles.announcementItem}>
-          No announcements for this stop.
+          {t('noAnnouncements')}
         </Text>
       </View>
     );
   } else if (announcements) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: `Announcements` }} />
+        <Stack.Screen options={{ title: t('title') }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>Direction: {direction}</Text>
+        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
         <Divider height={20} />
         <View style={{ flexDirection: "row", paddingBottom: 10 }}>
-          <Text style={[styles.announcementsHeader, { flex: 2 }]}>Line</Text>
+          <Text style={[styles.announcementsHeader, { flex: 2 }]}>{t('line')}</Text>
           <Text style={[styles.announcementsHeader, { flex: 7 }]}>
-            Announcement
+            {t('announcement')}
           </Text>
         </View>
         <ScrollView>
@@ -105,11 +107,11 @@ export default function Announcements() {
   } else {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: `Announcements` }} />
+        <Stack.Screen options={{ title: t('title') }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>Direction: {direction}</Text>
+        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
         <Divider height={20} />
-        <Text style={styles.announcementItem}>Loading...</Text>
+        <Text style={styles.announcementItem}>{t('loading')}</Text>
       </View>
     );
   }
