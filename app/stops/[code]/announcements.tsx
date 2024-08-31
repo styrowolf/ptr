@@ -60,38 +60,42 @@ export default function Announcements() {
   if (error) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title')}} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.subtitle}>Direction: {direction}</Text>
         <Divider height={20} />
         <Text style={styles.announcementItem}>
-          {t('announcementsUnavailable')}
+          {t("announcementsUnavailable")}
         </Text>
       </View>
     );
   } else if (announcements?.length === 0) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
-        <Divider height={20} />
-        <Text style={styles.announcementItem}>
-          {t('noAnnouncements')}
+        <Text style={styles.subtitle}>
+          {t("direction")}: {direction}
         </Text>
+        <Divider height={20} />
+        <Text style={styles.announcementItem}>{t("noAnnouncements")}</Text>
       </View>
     );
   } else if (announcements) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
+        <Text style={styles.subtitle}>
+          {t("direction")}: {direction}
+        </Text>
         <Divider height={20} />
         <View style={{ flexDirection: "row", paddingBottom: 10 }}>
-          <Text style={[styles.announcementsHeader, { flex: 2 }]}>{t('line')}</Text>
+          <Text style={[styles.announcementsHeader, { flex: 2 }]}>
+            {t("line")}
+          </Text>
           <Text style={[styles.announcementsHeader, { flex: 7 }]}>
-            {t('announcement')}
+            {t("announcement")}
           </Text>
         </View>
         <ScrollView>
@@ -107,11 +111,13 @@ export default function Announcements() {
   } else {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
+        <Text style={styles.subtitle}>
+          {t("direction")}: {direction}
+        </Text>
         <Divider height={20} />
-        <Text style={styles.announcementItem}>{t('loading')}</Text>
+        <Text style={styles.announcementItem}>{t("loading")}</Text>
       </View>
     );
   }

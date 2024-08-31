@@ -1,68 +1,68 @@
 {
-    "home": {
-        "nearbyStops": "nearby stops",
-        "findLines": "find lines",
-        "findStops": "find stops",
-        "recents": "Recents",
-        "direction": "Direction"
-    },
-    "nearbyStops": {
-        "title": "Nearby Stops",
-        "direction": "Direction"  
-    },
-    "searchLines": {
-        "title": "Search Lines",
-        "searchPlaceholder": "search by line code or line name",
-        "searchNotPossible": "Searching for lines is not possible at this moment."
-    },
-    "searchStops": {
-        "title": "Search Stops",
-        "searchPlaceholder": "search by stop name",
-        "searchNotPossible": "Searching for stops is not possible at this moment.",
-        "direction": "Direction"
-    },
-    "lines": {
-        "loading": "Loading...",
-        "route": "Route",
-        "map": "Map",
-        "schedule": "Schedule",
-        "announcements": "Announcements",
-        "stops": "Stops",
-        "noRoutesFound": "No routes found found for this line.",
-        "lineInformationUnavailable": "Line information cannot be retrieved at the moment."
-    },
-    "lineSchedule": {
-        "weekdays": "Weekdays",
-        "saturday": "Saturday",
-        "sunday": "Sunday"
-    },
-    "lineAnnouncements": {
-        "title": "Announcements",
-        "loading": "Loading...",
-        "noAnnouncements": "No announcements for this line.",
-        "announcementsUnavailable": "Announcements for this line cannot be retrieved at the moment."
-    },
-    "bus": {
-        "bus": "Bus"
-    },
-    "stops": {
-        "loading": "Loading...",
-        "announcements": "Announcements",
-        "lines": "Lines",
-        "arrivals": "Arrivals",
-        "line": "Line",
-        "lineName": "Line Name",
-        "mins": "mins",
-        "stopInformationUnavailable": "Stop information cannot be retrieved at the moment.",
-        "direction": "Direction"
-    },
-    "stopAnnouncements": {
-        "title": "Announcements",
-        "loading": "Loading...",
-        "noAnnouncements": "No announcements for this stop.",
-        "announcementsUnavailable": "Announcements for this stop cannot be retrieved at the moment.",
-        "line": "Line",
-        "announcement": "Announcement",
-        "direction": "Direction"
-    }
+  "home": {
+    "nearbyStops": "nearby stops",
+    "findLines": "find lines",
+    "findStops": "find stops",
+    "recents": "Recents",
+    "direction": "Direction"
+  },
+  "nearbyStops": {
+    "title": "Nearby Stops",
+    "direction": "Direction"
+  },
+  "searchLines": {
+    "title": "Search Lines",
+    "searchPlaceholder": "search by line code or line name",
+    "searchNotPossible": "Searching for lines is not possible at this moment."
+  },
+  "searchStops": {
+    "title": "Search Stops",
+    "searchPlaceholder": "search by stop name",
+    "searchNotPossible": "Searching for stops is not possible at this moment.",
+    "direction": "Direction"
+  },
+  "lines": {
+    "loading": "Loading...",
+    "route": "Route",
+    "map": "Map",
+    "schedule": "Schedule",
+    "announcements": "Announcements",
+    "stops": "Stops",
+    "noRoutesFound": "No routes found found for this line.",
+    "lineInformationUnavailable": "Line information cannot be retrieved at the moment."
+  },
+  "lineSchedule": {
+    "weekdays": "Weekdays",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "lineAnnouncements": {
+    "title": "Announcements",
+    "loading": "Loading...",
+    "noAnnouncements": "No announcements for this line.",
+    "announcementsUnavailable": "Announcements for this line cannot be retrieved at the moment."
+  },
+  "bus": {
+    "bus": "Bus"
+  },
+  "stops": {
+    "loading": "Loading...",
+    "announcements": "Announcements",
+    "lines": "Lines",
+    "arrivals": "Arrivals",
+    "line": "Line",
+    "lineName": "Line Name",
+    "mins": "mins",
+    "stopInformationUnavailable": "Stop information cannot be retrieved at the moment.",
+    "direction": "Direction"
+  },
+  "stopAnnouncements": {
+    "title": "Announcements",
+    "loading": "Loading...",
+    "noAnnouncements": "No announcements for this stop.",
+    "announcementsUnavailable": "Announcements for this stop cannot be retrieved at the moment.",
+    "line": "Line",
+    "announcement": "Announcement",
+    "direction": "Direction"
+  }
 }

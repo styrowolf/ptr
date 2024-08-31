@@ -1,68 +1,68 @@
 {
-    "home": {
-        "nearbyStops": "yakındaki duraklar",
-        "findLines": "hat ara",
-        "findStops": "durak ara",
-        "recents": "Son Arananlar",
-        "direction": "Yön"
-    },
-    "nearbyStops": {
-        "title": "Yakındaki Duraklar",
-        "direction": "Yön"
-    },
-    "searchLines": {
-        "title": "Hat Ara",
-        "searchPlaceholder": "hat kodu veya adı ile ara",
-        "searchNotPossible": "Şu anda hat araması yapılamıyor."
-    },
-    "searchStops": {
-        "title": "Durak Ara",
-        "searchPlaceholder": "durak adı ile ara",
-        "searchNotPossible": "Şu anda durak araması yapılamıyor.",
-        "direction": "Yön"
-    },
-    "lines": {
-        "loading": "Yükleniyor...",
-        "route": "Rota",
-        "map": "Harita",
-        "schedule": "Seferler",
-        "announcements": "Duyurular",
-        "stops": "Duraklar",
-        "noRoutesFound": "Bu hat için rota bulunamadı.",
-        "lineInformationUnavailable": "Şu anda hat bilgilerine ulaşılamıyor."
-    },
-    "lineSchedule": {
-        "weekdays": "Hafta İçi",
-        "saturday": "Cumartesi",
-        "sunday": "Pazar"
-    },
-    "lineAnnouncements": {
-        "title": "Duyurular",
-        "loading": "Yükleniyor...",
-        "noAnnouncements": "Bu hat için duyuru bulunamadı.",
-        "announcementsUnavailable": "Şu anda bu hat ile ilgili duyurulara ulaşılamıyor."
-    },
-    "bus": {
-        "bus": "Otobüs"
-    },
-    "stops": {
-        "loading": "Yükleniyor...",
-        "announcements": "Duyurular",
-        "lines": "Hatlar",
-        "arrivals": "Gelenler",
-        "line": "Hat",
-        "lineName": "Hat Adı",
-        "mins": "dk.",
-        "stopInformationUnavailable": "Şu anda durak bilgilerine ulaşılamıyor.",
-        "direction": "Yön"
-    },
-    "stopAnnouncements": {
-        "title": "Duyurular",
-        "loading": "Yükleniyor...",
-        "noAnnouncements": "Bu durak için duyuru bulunamadı",
-        "announcementsUnavailable": "Şu anda bu durak ile ilgili duyurulara ulaşılamıyor.",
-        "line": "Hat",
-        "announcement": "Duyuru",
-        "direction": "Yön"
-    }
+  "home": {
+    "nearbyStops": "yakındaki duraklar",
+    "findLines": "hat ara",
+    "findStops": "durak ara",
+    "recents": "Son Arananlar",
+    "direction": "Yön"
+  },
+  "nearbyStops": {
+    "title": "Yakındaki Duraklar",
+    "direction": "Yön"
+  },
+  "searchLines": {
+    "title": "Hat Ara",
+    "searchPlaceholder": "hat kodu veya adı ile ara",
+    "searchNotPossible": "Şu anda hat araması yapılamıyor."
+  },
+  "searchStops": {
+    "title": "Durak Ara",
+    "searchPlaceholder": "durak adı ile ara",
+    "searchNotPossible": "Şu anda durak araması yapılamıyor.",
+    "direction": "Yön"
+  },
+  "lines": {
+    "loading": "Yükleniyor...",
+    "route": "Rota",
+    "map": "Harita",
+    "schedule": "Seferler",
+    "announcements": "Duyurular",
+    "stops": "Duraklar",
+    "noRoutesFound": "Bu hat için rota bulunamadı.",
+    "lineInformationUnavailable": "Şu anda hat bilgilerine ulaşılamıyor."
+  },
+  "lineSchedule": {
+    "weekdays": "Hafta İçi",
+    "saturday": "Cumartesi",
+    "sunday": "Pazar"
+  },
+  "lineAnnouncements": {
+    "title": "Duyurular",
+    "loading": "Yükleniyor...",
+    "noAnnouncements": "Bu hat için duyuru bulunamadı.",
+    "announcementsUnavailable": "Şu anda bu hat ile ilgili duyurulara ulaşılamıyor."
+  },
+  "bus": {
+    "bus": "Otobüs"
+  },
+  "stops": {
+    "loading": "Yükleniyor...",
+    "announcements": "Duyurular",
+    "lines": "Hatlar",
+    "arrivals": "Gelenler",
+    "line": "Hat",
+    "lineName": "Hat Adı",
+    "mins": "dk.",
+    "stopInformationUnavailable": "Şu anda durak bilgilerine ulaşılamıyor.",
+    "direction": "Yön"
+  },
+  "stopAnnouncements": {
+    "title": "Duyurular",
+    "loading": "Yükleniyor...",
+    "noAnnouncements": "Bu durak için duyuru bulunamadı",
+    "announcementsUnavailable": "Şu anda bu durak ile ilgili duyurulara ulaşılamıyor.",
+    "line": "Hat",
+    "announcement": "Duyuru",
+    "direction": "Yön"
+  }
 }

@@ -91,9 +91,12 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
+          <Text style={styles.subtitle}>
+            {t("direction")}: {direction}
+          </Text>
           <Divider height={20} />
-          <Link push
+          <Link
+            push
             href={{
               pathname: "/stops/[code]/announcements",
               params: {
@@ -104,11 +107,12 @@ export default function StopPage() {
             }}
             style={[styles.text]}
           >
-            {t('announcements')} <Octicons name="report" size={16} color="black" />
+            {t("announcements")}{" "}
+            <Octicons name="report" size={16} color="black" />
           </Link>
           <Divider height={20} />
           <View>
-            <Text style={styles.text}>{t('lines')}</Text>
+            <Text style={styles.text}>{t("lines")}</Text>
             {chunkedLines.map((chunk, i) => (
               <View
                 key={`${chunk.map((e) => e.routeCode).join("-")}-${i}`}
@@ -116,7 +120,8 @@ export default function StopPage() {
               >
                 {arrayPad(chunk, 4, <View style={{ flex: 1 }}></View>).map(
                   (line: ToplasApi.LineOnStop) => (
-                    <Link push
+                    <Link
+                      push
                       style={[{ flex: 1 }, styles.linesTableText]}
                       onPress={() =>
                         ToplasPreferences.appendRecentLine({
@@ -140,11 +145,19 @@ export default function StopPage() {
             ))}
           </View>
           <Divider height={20} />
-          <Text style={[styles.text, { paddingBottom: 5 }]}>{t('arrivals')}</Text>
+          <Text style={[styles.text, { paddingBottom: 5 }]}>
+            {t("arrivals")}
+          </Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={[{ flex: 3 }, styles.arrivalsHeader]}>{t('line')}</Text>
-            <Text style={[{ flex: 12 }, styles.arrivalsHeader]}>{t('lineName')}</Text>
-            <Text style={[{ flex: 2 }, styles.arrivalsHeader]}>{t('mins')}</Text>
+            <Text style={[{ flex: 3 }, styles.arrivalsHeader]}>
+              {t("line")}
+            </Text>
+            <Text style={[{ flex: 12 }, styles.arrivalsHeader]}>
+              {t("lineName")}
+            </Text>
+            <Text style={[{ flex: 2 }, styles.arrivalsHeader]}>
+              {t("mins")}
+            </Text>
           </View>
           <ScrollView style={{ paddingBottom: 10 }}>
             {arrivals.map((arrival, i) => (
@@ -153,7 +166,8 @@ export default function StopPage() {
                 style={{ flexDirection: "row" }}
               >
                 <Text style={[{ flex: 3 }, styles.linesTableText]}>
-                  <Link push
+                  <Link
+                    push
                     onPress={() =>
                       ToplasPreferences.appendRecentLine({
                         lineCode: arrival.lineCode,
@@ -176,7 +190,8 @@ export default function StopPage() {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  <Link push
+                  <Link
+                    push
                     href={{
                       pathname: "/bus/[vehicleDoorNo]",
                       params: {
@@ -208,11 +223,11 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
-          <Divider height={20} />
-          <Text style={styles.text}>
-            {t('stopInformationUnavailable')}
+          <Text style={styles.subtitle}>
+            {t("direction")}: {direction}
           </Text>
+          <Divider height={20} />
+          <Text style={styles.text}>{t("stopInformationUnavailable")}</Text>
         </View>
       </SafeAreaView>
     );
@@ -226,9 +241,11 @@ export default function StopPage() {
         />
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>{t('direction')}: {direction}</Text>
+          <Text style={styles.subtitle}>
+            {t("direction")}: {direction}
+          </Text>
           <Divider height={20} />
-          <Text style={styles.text}>{t('loading')}</Text>
+          <Text style={styles.text}>{t("loading")}</Text>
         </View>
       </SafeAreaView>
     );

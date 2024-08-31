@@ -73,7 +73,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.WorkingDay && styles.selected,
             ]}
           >
-            {t('weekdays')}
+            {t("weekdays")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -86,7 +86,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.Saturday && styles.selected,
             ]}
           >
-            {t('saturday')}
+            {t("saturday")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -99,7 +99,7 @@ export default function SchedulePage() {
               dayType == ToplasApi.DayType.Sunday && styles.selected,
             ]}
           >
-            {t('sunday')}
+            {t("sunday")}
           </Text>
         </TouchableOpacity>
       </View>

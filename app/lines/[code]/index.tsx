@@ -93,7 +93,7 @@ export default function LinePage() {
           setSelectedRoute(route);
         } else if (val.routes.length > 0) {
           setSelectedRoute(val.routes[0]);
-        } 
+        }
         setLineInfo(val);
       })
       .catch(setError);
@@ -142,12 +142,12 @@ export default function LinePage() {
             {code} ({lineInfo.lineName})
           </Text>
           <Divider height={20} />
-          <Text style={styles.text}>{t('route')}</Text>
+          <Text style={styles.text}>{t("route")}</Text>
           <View style={{ flexDirection: "row" }}>
             <Dropdown
               style={{ flex: 1 }}
               placeholderStyle={styles.dropdownText}
-              placeholder={t('route')}
+              placeholder={t("route")}
               itemTextStyle={styles.dropdownText}
               selectedTextStyle={styles.dropdownText}
               value={selectedRoute!.routeCode}
@@ -169,7 +169,8 @@ export default function LinePage() {
           </View>
           <Divider height={20} />
           <View style={{ flexDirection: "row" }}>
-            <Link push
+            <Link
+              push
               href={{
                 pathname: "/lines/[code]/map",
                 params: {
@@ -179,11 +180,12 @@ export default function LinePage() {
               }}
               style={[styles.text, { flex: flexValues[0] }]}
             >
-              {t('map')}
+              {t("map")}
               <View style={{ width: 10 }} />
               <FontAwesome5 name="map" size={16} />
             </Link>
-            <Link push
+            <Link
+              push
               href={{
                 pathname: "/lines/[code]/schedule",
                 params: {
@@ -193,26 +195,29 @@ export default function LinePage() {
               }}
               style={[styles.text, { flex: flexValues[1] }]}
             >
-              {t('schedule')}
+              {t("schedule")}
               <View style={{ width: 10 }} />
               <FontAwesome5 name="clock" size={16} />
             </Link>
-            <Link push
+            <Link
+              push
               href={{
                 pathname: "/lines/[code]/announcements",
                 params: { code: code as string, name: lineInfo.lineName },
               }}
               style={[styles.text, { flex: flexValues[2] }]}
             >
-              {t('announcements')} <Octicons name="report" size={16} color="black" />
+              {t("announcements")}{" "}
+              <Octicons name="report" size={16} color="black" />
             </Link>
           </View>
           <Divider height={20} />
-          <Text style={styles.text}>{t('stops')}</Text>
+          <Text style={styles.text}>{t("stops")}</Text>
           <ScrollView style={{ paddingBottom: 10 }}>
             {stops.map((e, i) => (
               <Text style={styles.stopItem} key={`${e.stopCode}-${i}`}>
-                <Link push
+                <Link
+                  push
                   onPress={() => {
                     ToplasPreferences.appendRecentStop(e);
                   }}
@@ -228,7 +233,8 @@ export default function LinePage() {
                   {i + 1}. {e.stopName}
                 </Link>{" "}
                 {e.bus ? (
-                  <Link push
+                  <Link
+                    push
                     href={{
                       pathname: "/bus/[vehicleDoorNo]",
                       params: {
@@ -261,7 +267,7 @@ export default function LinePage() {
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>{t('noRoutesFound')}</Text>
+          <Text style={styles.text}>{t("noRoutesFound")}</Text>
         </View>
       </SafeAreaView>
     );
@@ -276,9 +282,7 @@ export default function LinePage() {
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>
-            {t('lineInformationUnavailable')}
-          </Text>
+          <Text style={styles.text}>{t("lineInformationUnavailable")}</Text>
         </View>
       </SafeAreaView>
     );
@@ -293,7 +297,7 @@ export default function LinePage() {
         <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
           <Text style={styles.title}>{code}</Text>
           <Divider height={20} />
-          <Text style={styles.text}>{t('loading')}</Text>
+          <Text style={styles.text}>{t("loading")}</Text>
         </View>
       </SafeAreaView>
     );

@@ -46,29 +46,27 @@ export default function Announcements() {
   if (error) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{`${code} (${name})`}</Text>
         <Divider height={20} />
         <Text style={styles.announcementItem}>
-          {t('announcementsUnavailable')}
+          {t("announcementsUnavailable")}
         </Text>
       </View>
     );
   } else if (announcements?.length === 0) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{`${code} (${name})`}</Text>
         <Divider height={20} />
-        <Text style={styles.announcementItem}>
-          {t('noAnnouncements')}
-        </Text>
+        <Text style={styles.announcementItem}>{t("noAnnouncements")}</Text>
       </View>
     );
   } else if (announcements) {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{`${code} (${name})`}</Text>
         <Divider height={20} />
         <ScrollView>
@@ -84,10 +82,10 @@ export default function Announcements() {
   } else {
     return (
       <View style={[styles.view, { paddingBottom: insets.bottom }]}>
-        <Stack.Screen options={{ title: t('title') }} />
+        <Stack.Screen options={{ title: t("title") }} />
         <Text style={styles.title}>{`${code} (${name})`}</Text>
         <Divider height={20} />
-        <Text style={styles.announcementItem}>{t('loading')}</Text>
+        <Text style={styles.announcementItem}>{t("loading")}</Text>
       </View>
     );
   }

@@ -74,13 +74,13 @@ export default function SearchPage() {
     >
       <Stack.Screen
         options={{
-          title: t('title'),
+          title: t("title"),
         }}
       />
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
         <TextInput
           style={styles.searchBox}
-          placeholder={t('searchPlaceholder')}
+          placeholder={t("searchPlaceholder")}
           placeholderTextColor="black"
           onChangeText={(text) => setQuery(text)}
         ></TextInput>
@@ -123,7 +123,7 @@ function SearchResults({ query }: { query: string }) {
   } else {
     return (
       <Text style={[styles.errorText, { marginTop: 10 }]}>
-        {t('searchNotPossible')}
+        {t("searchNotPossible")}
       </Text>
     );
   }

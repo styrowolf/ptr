@@ -123,7 +123,7 @@ export default function NearbyStops() {
 
   return (
     <View style={styles.view}>
-      <Stack.Screen options={{ title: t('title') }} />
+      <Stack.Screen options={{ title: t("title") }} />
       <MapLibreGL.MapView
         style={styles.map}
         logoEnabled={true}
@@ -270,7 +270,9 @@ function SearchItem({
         />
         <View>
           <Text style={styles.stopName}>{stop.stopName}</Text>
-          <Text style={styles.subtitle}>{t('direction')}: {stop.direction}</Text>
+          <Text style={styles.subtitle}>
+            {t("direction")}: {stop.direction}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>

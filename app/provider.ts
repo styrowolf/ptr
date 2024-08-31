@@ -52,7 +52,9 @@ export class ToplasDataProvider {
     return await this.client.liveBusesOnRoute(code);
   }
 
-  static getLiveBusByVehicleDoorNo(vehicleDoorNo: string): Promise<ToplasApi.LiveBusIndividual> {
+  static getLiveBusByVehicleDoorNo(
+    vehicleDoorNo: string,
+  ): Promise<ToplasApi.LiveBusIndividual> {
     return this.client.busLocationLiveBusVehicleDoorNoGet(vehicleDoorNo);
   }
 }

@@ -118,7 +118,7 @@ export default function BusPage() {
     <View style={styles.page}>
       <Stack.Screen
         options={{
-          title: `${t('bus')} ${vehicleDoorNo}`,
+          title: `${t("bus")} ${vehicleDoorNo}`,
         }}
       />
       <MapLibreGL.MapView
