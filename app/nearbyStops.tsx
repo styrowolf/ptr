@@ -25,18 +25,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ToplasDataProvider } from "./provider";
 import { ToplasPreferences } from "./storage";
 import { useTranslation } from "react-i18next";
+import appStyles from "./styles";
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-    fontStyle: "italic",
-  },
   view: {
     flex: 1,
   },
@@ -44,16 +35,39 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "stretch",
   },
-  itemView: {
+  searchItemView: {
     flexDirection: "row",
     alignItems: "center",
+    flex: 1,
     width: "100%",
     borderColor: "black",
     borderWidth: 3,
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    height: 80,
+  },
+  selected: {
+    opacity: 0.5,
+  },
+  stopCircle: {
+    borderWidth: 3,
+    borderRadius: 12,
+    borderStyle: "solid",
+    backgroundColor: "white",
+    height: 24,
+    width: 24,
+    borderColor: "black",
+    zIndex: -100,
+  },
+  stopNameBox: {
+    backgroundColor: "white",
+    borderWidth: 3,
+    padding: 4,
+    borderRadius: 12,
+    zIndex: -100,
+  },
+  tc: {
+    textAlign: "center",
   },
 });
 
@@ -215,32 +229,6 @@ function SearchItem({
   isSelected?: boolean;
 }) {
   const { t } = useTranslation([], { keyPrefix: "nearbyStops" });
-  const styles = StyleSheet.create({
-    stopName: {
-      fontSize: 20,
-      fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-      fontWeight: "bold",
-    },
-    subtitle: {
-      fontSize: 16,
-      fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-      fontStyle: "italic",
-    },
-    searchItemView: {
-      flexDirection: "row",
-      alignItems: "center",
-      flex: 1,
-      width: "100%",
-      borderColor: "black",
-      borderWidth: 3,
-      borderRadius: 15,
-      paddingVertical: 10,
-      paddingHorizontal: 10,
-    },
-    selected: {
-      opacity: 0.5,
-    },
-  });
   return (
     <TouchableOpacity
       onPress={() => {
@@ -269,8 +257,8 @@ function SearchItem({
           color="black"
         />
         <View>
-          <Text style={styles.stopName}>{stop.stopName}</Text>
-          <Text style={styles.subtitle}>
+          <Text style={appStyles.t20b}>{stop.stopName}</Text>
+          <Text style={appStyles.t16i}>
             {t("direction")}: {stop.direction}
           </Text>
         </View>
@@ -286,28 +274,6 @@ function StopMarker({
   stop: ToplasApi.NearbyStop;
   onPress: () => void;
 }) {
-  const styles = StyleSheet.create({
-    stopCircle: {
-      borderWidth: 3,
-      borderRadius: 12,
-      borderStyle: "solid",
-      backgroundColor: "white",
-      height: 24,
-      width: 24,
-      borderColor: "black",
-      zIndex: -100,
-    },
-    stopNameBox: {
-      backgroundColor: "white",
-      borderWidth: 3,
-      padding: 4,
-      borderRadius: 12,
-      zIndex: -100,
-    },
-    tc: {
-      textAlign: "center",
-    },
-  });
 
   return (
     <MapLibreGL.MarkerView

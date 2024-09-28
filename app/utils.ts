@@ -59,8 +59,7 @@ export const MAP_BOUNDS = {
 };
 export const MAP_PADDING = 50;
 export const MAX_ZOOM = 15;
-export const MAP_STYLE_URL = "https://0x0.st/XVue.json";
-//export const MAP_STYLE_URL = "https://0x0.st/XVuj.json";
+export const MAP_STYLE_URL = "https://api.toplas.xyz/maplibre_styles/dark.json";
 
 export function getBounds(
   stops: ToplasApi.LineStop[],

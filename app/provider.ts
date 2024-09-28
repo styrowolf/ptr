@@ -2,7 +2,7 @@ import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
 
 export class ToplasDataProvider {
   static client = new ToplasApiClient({
-    environment: () => "https://toplas.kurt.town/api",
+    environment: () => "https://api.toplas.xyz",
   });
 
   static async getLineInfo(code: string): Promise<ToplasApi.LineInfo> {

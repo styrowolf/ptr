@@ -22,22 +22,14 @@ import { arrayPad, chunkArray } from "./utils";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import appStyles from "./styles";
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 20,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-  },
+  text: appStyles.t16,
+  title: appStyles.t24b,
+  subtitle: appStyles.t20b,
+  stopTitle: appStyles.t20b,
+  stopSubtitle: appStyles.t16i,
   view: {
     flex: 1,
     marginHorizontal: 10,
@@ -54,32 +46,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 80,
   },
+  linesTableText: appStyles.t20b,
+  stopItem: {
+    padding: 4,
+    ...appStyles.t16,
+  },
   border: {
     borderColor: "black",
     borderWidth: 3,
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 10,
-  },
-  linesTableText: {
-    fontSize: 20,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-  },
-  stopItem: {
-    padding: 4,
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-  },
-  stopTitle: {
-    fontSize: 20,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-  },
-  stopSubtitle: {
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontStyle: "italic",
   },
 });
 

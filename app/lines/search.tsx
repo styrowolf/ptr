@@ -18,16 +18,10 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { ToplasDataProvider } from "../provider";
 import { ToplasPreferences } from "../storage";
 import { useTranslation } from "react-i18next";
+import appStyles from "../styles";
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 20,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-  },
-  errorText: {
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-  },
+  errorText: appStyles.t16,
   searchBox: {
     borderWidth: 2,
     borderColor: "black",
@@ -37,16 +31,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
   },
-  lineCode: {
-    fontSize: 20,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontStyle: "italic",
-  },
+  lineCode: appStyles.t20b,
+  subtitle: appStyles.t16i,
   searchItemView: {
     flexDirection: "row",
     alignItems: "center",
