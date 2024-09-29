@@ -30,9 +30,15 @@
     "plugins": [
       "expo-router",
       "@maplibre/maplibre-react-native",
-      ["expo-font", {
-        "fonts": ["node_modules/@expo-google-fonts/ibm-plex-mono/IBMPlexMono_400Regular.ttf"]
-      }]
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/ibm-plex-mono/IBMPlexMono_400Regular.ttf"
+          ]
+        }
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
