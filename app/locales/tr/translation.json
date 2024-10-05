@@ -64,5 +64,8 @@
     "line": "Hat",
     "announcement": "Duyuru",
     "direction": "Yön"
+  },
+  "settings": {
+    "title": "Ayarlar"
   }
 }

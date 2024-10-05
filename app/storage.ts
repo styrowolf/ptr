@@ -107,6 +107,10 @@ export class ToplasPreferences {
     this.setRecentStops(stops);
   }
 
+  public static clearRecentStops() {
+    this.setRecentStops([]);
+  }
+
   public static getRecentLines(): LineWithRoute[] {
     return this.get("recentLines") ?? [];
   }
@@ -129,5 +133,23 @@ export class ToplasPreferences {
 
   public static setRecentLines(lines: LineWithRoute[]) {
     this.set("recentLines", lines);
+  }
+
+  public static clearRecentLines() {
+    this.setRecentLines([]);
+  }
+
+  // Map style
+  public static getMapStyle(): string {
+    return this.get("mapStyle") ?? "light";
+  }
+
+  public static setMapStyle(style: "light" | "dark" | "grayscale") {
+    this.set("mapStyle", style);
+  }
+
+  public static getMapStyleUrl(): string {
+    const style = this.getMapStyle();
+    return `https://api.toplas.xyz/maplibre_styles/${style}.json`;
   }
 }

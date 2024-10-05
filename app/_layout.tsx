@@ -75,6 +75,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ title: "toplaş" }} />
         <Stack.Screen name="nearbyStops" />
+        <Stack.Screen name="settings" />
         <Stack.Screen name="stops/[code]/index" />
         <Stack.Screen name="stops/[code]/announcements" />
         <Stack.Screen name="stops/search" />

@@ -6,7 +6,6 @@ import {
   getPadding,
   MAP_BOUNDS,
   MAP_PADDING,
-  MAP_STYLE_URL,
   selectClosestFeature,
   stopLayerStyle,
 } from "./utils";
@@ -141,7 +140,7 @@ export default function NearbyStops() {
       <MapLibreGL.MapView
         style={styles.map}
         logoEnabled={true}
-        styleURL={MAP_STYLE_URL}
+        styleURL={ToplasPreferences.getMapStyleUrl()}
         ref={(r) => (mapRef.current = r)}
       >
         <MapLibreGL.Camera

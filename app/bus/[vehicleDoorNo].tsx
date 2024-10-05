@@ -12,12 +12,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { ToplasAPICache } from "../storage";
+import { ToplasAPICache, ToplasPreferences } from "../storage";
 import {
   getBounds,
   getPadding,
   MAP_PADDING,
-  MAP_STYLE_URL,
   MAX_ZOOM,
   selectClosestFeature,
   stopLayerStyle,
@@ -124,7 +123,7 @@ export default function BusPage() {
       <MapLibreGL.MapView
         style={styles.map}
         logoEnabled={true}
-        styleURL={MAP_STYLE_URL}
+        styleURL={ToplasPreferences.getMapStyleUrl()}
         ref={(r) => (mapRef.current = r)}
       >
         <MapLibreGL.Camera

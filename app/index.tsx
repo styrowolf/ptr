@@ -14,6 +14,7 @@ import {
   FontAwesome6,
   Ionicons,
   MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import Divider from "./components/divider";
@@ -98,6 +99,10 @@ function RecentsWidget() {
             fontFamily: "IBMPlexMono-BI",
             color: "white",
           },
+          headerRight: () => 
+            <TouchableOpacity onPress={() => router.push("/settings")}>
+              <MaterialIcons name="settings" size={24} style={{ color: "white" }}></MaterialIcons>
+            </TouchableOpacity>
         }}
       />
       <View style={styles.border}>
@@ -173,7 +178,7 @@ function RecentLines({ lines }: { lines: LineWithRoute[] }) {
     const placeholders = ["..."];
     return placeholders.map((placeholder, i) => (
       <View key={`${placeholder}-${i}`} style={{ flexDirection: "row" }}>
-        {arrayPad(placeholders, 4, <View style={{ flex: 1 }}></View>).map(
+        {arrayPad(placeholders, 4, <View></View>).map(
           (p: string, i) => (
             <Text key={i} style={[{ flex: 1 }, styles.linesTableText]}>
               {p}

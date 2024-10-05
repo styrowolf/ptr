@@ -64,5 +64,8 @@
     "line": "Line",
     "announcement": "Announcement",
     "direction": "Direction"
+  },
+  "settings": {
+    "title": "Settings"
   }
 }
