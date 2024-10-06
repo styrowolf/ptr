@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import ToplasLanguageModule from "./languageProvider";
 import i18n from "i18next";
-import { set } from "@/sdks/typescript/core/schemas";
 
 const styles = StyleSheet.create({
     sectionTitle: appStyles.t24b,
@@ -28,6 +27,12 @@ function mapStyleChangeCallback(style: "light" | "dark" | "grayscale", setter: (
 const languageOptions = [
     { label: "English", value: "en" },
     { label: "Türkçe", value: "tr" },
+];
+
+const mapStyleOptions: { value: "light" | "dark" | "grayscale" }[] = [
+    { value: "light" },
+    { value: "dark" },
+    { value: "grayscale" },
 ];
 
 export default function Settings() {
@@ -51,18 +56,19 @@ export default function Settings() {
             </TouchableOpacity>
             <Divider height={20} />
             <Text style={styles.sectionTitle}>{t('maps')}</Text>
-            <View style={{ flex: 1, flexDirection: "row", gap: 20}}>
-                <Text style={styles.text}>{t('mapStyle')}:</Text>
-                <TouchableOpacity onPress={() => mapStyleChangeCallback("light", setSelectedMapStyle)}>
-                    <Text style={[styles.text, selectedMapStyle === "light" && styles.selectedOpacity]}>{t('light')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => mapStyleChangeCallback("grayscale", setSelectedMapStyle)}>
-                    <Text style={[styles.text, selectedMapStyle === "grayscale" && styles.selectedOpacity]}>{t('grayscale')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => mapStyleChangeCallback("dark", setSelectedMapStyle)}>
-                    <Text style={[styles.text, selectedMapStyle === "dark" && styles.selectedOpacity]}>{t('dark')}</Text>
-                </TouchableOpacity>
-            </View>
+            <Text style={styles.text}>{t('mapStyle')}</Text>
+            <Dropdown
+                style={{ flex: 1 }}
+                placeholderStyle={styles.text}
+                placeholder={t('language')}
+                itemTextStyle={styles.text}
+                selectedTextStyle={styles.text}
+                value={selectedMapStyle}
+                data={mapStyleOptions.map((e) => ({ label: t(e.value), value: e.value }))}
+                onChange={async (e) => {
+                    mapStyleChangeCallback(e.value, setSelectedMapStyle);
+                }} labelField={"label"} valueField={"value"} 
+            />
             <Divider height={20} />
             <Text style={styles.sectionTitle}>{t('language')}</Text>
             <Dropdown
