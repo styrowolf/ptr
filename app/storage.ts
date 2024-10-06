@@ -152,4 +152,13 @@ export class ToplasPreferences {
     const style = this.getMapStyle();
     return `https://api.toplas.xyz/maplibre_styles/${style}.json`;
   }
+
+  // Language
+  public static getLanguage(): string {
+    return this.get("language") ?? "system";
+  }
+
+  public static setLanguage(language: string) {
+    this.set("language", language);
+  }
 }

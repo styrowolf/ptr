@@ -66,6 +66,15 @@
     "direction": "Direction"
   },
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "recents": "Recents",
+    "clearRecentLines": "Clear recent lines",
+    "clearRecentStops": "Clear recent stops",
+    "maps": "Maps",
+    "mapStyle": "Map style",
+    "light": "Light",
+    "dark": "Dark",
+    "grayscale": "Grayscale",
+    "language": "Language"
   }
 }
