@@ -20,6 +20,7 @@ SplashScreen.preventAutoHideAsync();
 ToplasAPICache.clear();
 
 MapLibreGL.setAccessToken(null);
+MapLibreGL.offlineManager.setTileCountLimit(Number.MAX_VALUE);
 
 // i18n init start
 i18n

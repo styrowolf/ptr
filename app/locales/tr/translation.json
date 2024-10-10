@@ -75,6 +75,15 @@
     "light": "Açık",
     "dark": "Koyu",
     "grayscale": "Gri",
-    "language": "Dil"
+    "language": "Dil",
+    "offlineMap": "Çevrimdışı harita",
+    "noneMapQuality": "Çevrimdışı harita yok",
+    "lowMapQuality": "Düşük Detay",
+    "mediumMapQuality": "Orta Detay",
+    "highMapQuality": "Yüksek Detay",
+    "mapPercent": "Yüklenme durumu",
+    "mapDataSize": "Kapladığı alan",
+    "deleteAllMapData": "Tüm harita verilerini sil",
+    "invalidatePack": "Harita verisini güncelle"
   }
 }

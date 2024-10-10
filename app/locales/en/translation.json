@@ -75,6 +75,15 @@
     "light": "Light",
     "dark": "Dark",
     "grayscale": "Grayscale",
-    "language": "Language"
+    "language": "Language",
+    "offlineMap": "Offline map",
+    "noneMapQuality": "None",
+    "lowMapQuality": "Low Detail",
+    "mediumMapQuality": "Medium Detail",
+    "highMapQuality": "High Detail",
+    "mapPercent": "Loaded",
+    "mapDataSize": "Data Size",
+    "deleteAllMapData": "Delete all map data",
+    "invalidatePack": "Update map data"
   }
 }

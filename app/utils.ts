@@ -53,6 +53,8 @@ export function isOppositeDirection(
   return oppositeByName;
 }
 
+export const ENABLE_OFFLINE_MAP_SETTINGS = true;
+
 export const MAP_BOUNDS = {
   ne: [27.970848, 40.737673],
   sw: [29.958805, 41.671],
