@@ -115,7 +115,7 @@ export default function LinePage() {
   }, [code]);
 
   if (lineInfo && selectedRoute) {
-    const stops: StopWithBus[] = selectedRoute!.stops;
+    const stops: StopWithBus[] = selectedRoute!.stops.map((e) => (Object.assign({}, e) as StopWithBus));
     const buses = liveBuses.filter(
       (e) => e.routeCode == selectedRoute?.routeCode,
     );
