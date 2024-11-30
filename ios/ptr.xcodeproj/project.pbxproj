@@ -20,14 +20,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		03A895FD401894D20111B2A3 /* Pods-toplaş.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toplaş.debug.xcconfig"; path = "Target Support Files/Pods-toplaş/Pods-toplaş.debug.xcconfig"; sourceTree = "<group>"; };
+		03A895FD401894D20111B2A3 /* Pods-toplaş.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toplaş.debug.xcconfig"; path = "Target Support Files/Pods-toplaş/Pods-toplaş.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ptr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ptr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ptr/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ptr/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ptr/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ptr/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ptr/main.m; sourceTree = "<group>"; };
-		17203BA4E807F6112D4C973E /* Pods-toplaş.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toplaş.release.xcconfig"; path = "Target Support Files/Pods-toplaş/Pods-toplaş.release.xcconfig"; sourceTree = "<group>"; };
+		17203BA4E807F6112D4C973E /* Pods-toplaş.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toplaş.release.xcconfig"; path = "Target Support Files/Pods-toplaş/Pods-toplaş.release.xcconfig"; sourceTree = "<group>"; };
 		24982EB483B6A2BCD79C98FE /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ptr/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		2EB9D5C11EFFA7839A77F49F /* libPods-ptr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ptr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-ptr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ptr.debug.xcconfig"; path = "Target Support Files/Pods-ptr/Pods-ptr.debug.xcconfig"; sourceTree = "<group>"; };
@@ -131,8 +131,8 @@
 			children = (
 				6C2E3173556A471DD304B334 /* Pods-ptr.debug.xcconfig */,
 				7A4D352CD337FB3A3BF06240 /* Pods-ptr.release.xcconfig */,
-				03A895FD401894D20111B2A3 /* Pods-toplaş.debug.xcconfig */,
-				17203BA4E807F6112D4C973E /* Pods-toplaş.release.xcconfig */,
+				03A895FD401894D20111B2A3 /* Pods-toplaş.debug.xcconfig */,
+				17203BA4E807F6112D4C973E /* Pods-toplaş.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -183,7 +183,6 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = AKUZ7824T5;
 						LastSwiftMigration = 1250;
 						ProvisioningStyle = Automatic;
 					};
@@ -496,10 +495,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -553,10 +549,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

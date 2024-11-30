@@ -41,14 +41,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToplasApiClient = void 0;
 const environments = __importStar(require("./environments"));
 const core = __importStar(require("./core"));
-const errors = __importStar(require("./errors"));
-const ToplasApi = __importStar(require("./api"));
+const errors = __importStar(require("./errors/index"));
+const ToplasApi = __importStar(require("./api/index"));
 const url_join_1 = __importDefault(require("url-join"));
-const serializers = __importStar(require("./serialization"));
+const serializers = __importStar(require("./serialization/index"));
 class ToplasApiClient {
     constructor(_options = {}) {
         this._options = _options;
     }
+    /**
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.readRootGet()
+     */
     readRootGet(requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
@@ -57,10 +63,14 @@ class ToplasApiClient {
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
                 return _response.body;
@@ -87,10 +97,14 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApi.LineStopsLineLineCodeStopsGetRequest} request
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.lineStopsLineLineCodeStopsGet("line_code", {})
+     *     await client.lineStopsLineLineCodeStopsGet("line_code")
      */
     lineStopsLineLineCodeStopsGet(lineCode, request = {}, requestOptions) {
         var _a;
@@ -101,18 +115,22 @@ class ToplasApiClient {
                 _queryParams["route_code"] = routeCode;
             }
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${lineCode}/stops`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${encodeURIComponent(lineCode)}/stops`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.lineStopsLineLineCodeStopsGet.Response.parseOrThrow(_response.body, {
+                return serializers.lineStopsLineLineCodeStopsGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -122,7 +140,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -151,26 +169,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.routesLineLineCodeRoutesGet("line_code")
+     *     await client.routesLineLineCodeRoutesGet("line_code")
      */
     routesLineLineCodeRoutesGet(lineCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${lineCode}/routes`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${encodeURIComponent(lineCode)}/routes`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.routesLineLineCodeRoutesGet.Response.parseOrThrow(_response.body, {
+                return serializers.routesLineLineCodeRoutesGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -180,7 +205,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -209,26 +234,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.timetableLineLineCodeTimetableGet("line_code")
+     *     await client.timetableLineLineCodeTimetableGet("line_code")
      */
     timetableLineLineCodeTimetableGet(lineCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${lineCode}/timetable`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${encodeURIComponent(lineCode)}/timetable`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.timetableLineLineCodeTimetableGet.Response.parseOrThrow(_response.body, {
+                return serializers.timetableLineLineCodeTimetableGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -238,7 +270,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -267,26 +299,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.lineInfo("line_code")
+     *     await client.lineInfo("line_code")
      */
     lineInfo(lineCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${lineCode}/info`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `line/${encodeURIComponent(lineCode)}/info`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.LineInfo.parseOrThrow(_response.body, {
+                return serializers.LineInfo.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -296,7 +335,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -325,26 +364,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} routeCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.routeStopsRouteRouteCodeStopsGet("route_code")
+     *     await client.routeStopsRouteRouteCodeStopsGet("route_code")
      */
     routeStopsRouteRouteCodeStopsGet(routeCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${routeCode}/stops`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${encodeURIComponent(routeCode)}/stops`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.routeStopsRouteRouteCodeStopsGet.Response.parseOrThrow(_response.body, {
+                return serializers.routeStopsRouteRouteCodeStopsGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -354,7 +400,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -383,26 +429,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} routeCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.routeTimetableRouteRouteCodeTimetableGet("route_code")
+     *     await client.routeTimetableRouteRouteCodeTimetableGet("route_code")
      */
     routeTimetableRouteRouteCodeTimetableGet(routeCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${routeCode}/timetable`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${encodeURIComponent(routeCode)}/timetable`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.routeTimetableRouteRouteCodeTimetableGet.Response.parseOrThrow(_response.body, {
+                return serializers.routeTimetableRouteRouteCodeTimetableGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -412,7 +465,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -441,26 +494,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} routeCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.routeInfo("route_code")
+     *     await client.routeInfo("route_code")
      */
     routeInfo(routeCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${routeCode}/info/`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `route/${encodeURIComponent(routeCode)}/info/`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.RouteInfo.parseOrThrow(_response.body, {
+                return serializers.RouteInfo.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -470,7 +530,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -499,10 +559,13 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {ToplasApi.NearbyStopsStopsGetRequest} request
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.nearbyStopsStopsGet({
+     *     await client.nearbyStopsStopsGet({
      *         lat: 1.1,
      *         lon: 1.1
      *     })
@@ -522,14 +585,18 @@ class ToplasApiClient {
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.nearbyStopsStopsGet.Response.parseOrThrow(_response.body, {
+                return serializers.nearbyStopsStopsGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -539,7 +606,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -568,10 +635,14 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} stopCode
+     * @param {ToplasApi.LinesOnStopStopStopCodeLinesGetRequest} request
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.linesOnStopStopStopCodeLinesGet("stop_code", {})
+     *     await client.linesOnStopStopStopCodeLinesGet("stop_code")
      */
     linesOnStopStopStopCodeLinesGet(stopCode, request = {}, requestOptions) {
         var _a;
@@ -582,18 +653,22 @@ class ToplasApiClient {
                 _queryParams["api"] = api.toString();
             }
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `stop/${stopCode}/lines`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `stop/${encodeURIComponent(stopCode)}/lines`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.linesOnStopStopStopCodeLinesGet.Response.parseOrThrow(_response.body, {
+                return serializers.linesOnStopStopStopCodeLinesGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -603,7 +678,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -632,26 +707,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {number} stopCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.stopInfo(1)
+     *     await client.stopInfo(1)
      */
     stopInfo(stopCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `stop/${stopCode}/info`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `stop/${encodeURIComponent(stopCode)}/info`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.StopInfo.parseOrThrow(_response.body, {
+                return serializers.StopInfo.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -661,7 +743,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -690,26 +772,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.liveBusesOnRoute("line_code")
+     *     await client.liveBusesOnRoute("line_code")
      */
     liveBusesOnRoute(lineCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/line/${lineCode}/buses`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/line/${encodeURIComponent(lineCode)}/buses`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.liveBusesOnRoute.Response.parseOrThrow(_response.body, {
+                return serializers.liveBusesOnRoute.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -719,7 +808,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -748,26 +837,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} lineCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.lineAnnouncementsLiveLineLineCodeAnnouncementsGet("line_code")
+     *     await client.lineAnnouncementsLiveLineLineCodeAnnouncementsGet("line_code")
      */
     lineAnnouncementsLiveLineLineCodeAnnouncementsGet(lineCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/line/${lineCode}/announcements`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/line/${encodeURIComponent(lineCode)}/announcements`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.lineAnnouncementsLiveLineLineCodeAnnouncementsGet.Response.parseOrThrow(_response.body, {
+                return serializers.lineAnnouncementsLiveLineLineCodeAnnouncementsGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -777,7 +873,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -806,26 +902,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {number} stopCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.stopArrivals(1)
+     *     await client.stopArrivals(1)
      */
     stopArrivals(stopCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/stop/${stopCode}/arrivals`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/stop/${encodeURIComponent(stopCode)}/arrivals`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.stopArrivals.Response.parseOrThrow(_response.body, {
+                return serializers.stopArrivals.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -835,7 +938,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -864,26 +967,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {number} stopCode
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.stopAnnouncementsLiveStopStopCodeAnnouncementsGet(1)
+     *     await client.stopAnnouncementsLiveStopStopCodeAnnouncementsGet(1)
      */
     stopAnnouncementsLiveStopStopCodeAnnouncementsGet(stopCode, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/stop/${stopCode}/announcements`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/stop/${encodeURIComponent(stopCode)}/announcements`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.stopAnnouncementsLiveStopStopCodeAnnouncementsGet.Response.parseOrThrow(_response.body, {
+                return serializers.stopAnnouncementsLiveStopStopCodeAnnouncementsGet.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -893,7 +1003,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -922,26 +1032,33 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {string} vehicleDoorNo
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.busLocationLiveBusVehicleDoorNoGet("vehicle_door_no")
+     *     await client.busLocationLiveBusVehicleDoorNoGet("vehicle_door_no")
      */
     busLocationLiveBusVehicleDoorNoGet(vehicleDoorNo, requestOptions) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
-                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/bus/${vehicleDoorNo}`),
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `live/bus/${encodeURIComponent(vehicleDoorNo)}`),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.LiveBusIndividual.parseOrThrow(_response.body, {
+                return serializers.LiveBusIndividual.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -951,7 +1068,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -980,10 +1097,130 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.getFleetFleetGet()
+     */
+    getFleetFleetGet(requestOptions) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const _response = yield core.fetcher({
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, "fleet"),
+                method: "GET",
+                headers: {
+                    "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
+                },
+                contentType: "application/json",
+                requestType: "json",
+                timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
+            });
+            if (_response.ok) {
+                return serializers.getFleetFleetGet.Response.parseOrThrow(_response.body, {
+                    unrecognizedObjectKeys: "passthrough",
+                    allowUnrecognizedUnionMembers: true,
+                    allowUnrecognizedEnumValues: true,
+                    breadcrumbsPrefix: ["response"],
+                });
+            }
+            if (_response.error.reason === "status-code") {
+                throw new errors.ToplasApiError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                });
+            }
+            switch (_response.error.reason) {
+                case "non-json":
+                    throw new errors.ToplasApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.rawBody,
+                    });
+                case "timeout":
+                    throw new errors.ToplasApiTimeoutError();
+                case "unknown":
+                    throw new errors.ToplasApiError({
+                        message: _response.error.errorMessage,
+                    });
+            }
+        });
+    }
+    /**
+     * @param {string} vehicleDoorNo
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.searchRoute({
+     *     await client.getBusTasksBusVehicleDoorNoTasksGet("vehicle_door_no")
+     */
+    getBusTasksBusVehicleDoorNoTasksGet(vehicleDoorNo, requestOptions) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const _response = yield core.fetcher({
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, `bus/${encodeURIComponent(vehicleDoorNo)}/tasks`),
+                method: "GET",
+                headers: {
+                    "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
+                },
+                contentType: "application/json",
+                requestType: "json",
+                timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
+            });
+            if (_response.ok) {
+                return serializers.getBusTasksBusVehicleDoorNoTasksGet.Response.parseOrThrow(_response.body, {
+                    unrecognizedObjectKeys: "passthrough",
+                    allowUnrecognizedUnionMembers: true,
+                    allowUnrecognizedEnumValues: true,
+                    breadcrumbsPrefix: ["response"],
+                });
+            }
+            if (_response.error.reason === "status-code") {
+                switch (_response.error.statusCode) {
+                    case 422:
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }));
+                    default:
+                        throw new errors.ToplasApiError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.body,
+                        });
+                }
+            }
+            switch (_response.error.reason) {
+                case "non-json":
+                    throw new errors.ToplasApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.rawBody,
+                    });
+                case "timeout":
+                    throw new errors.ToplasApiTimeoutError();
+                case "unknown":
+                    throw new errors.ToplasApiError({
+                        message: _response.error.errorMessage,
+                    });
+            }
+        });
+    }
+    /**
+     * @param {ToplasApi.SearchRouteRequest} request
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToplasApi.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.searchRoute({
      *         query: "query"
      *     })
      */
@@ -998,14 +1235,18 @@ class ToplasApiClient {
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.searchRoute.Response.parseOrThrow(_response.body, {
+                return serializers.searchRoute.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -1015,7 +1256,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -1044,10 +1285,13 @@ class ToplasApiClient {
         });
     }
     /**
+     * @param {ToplasApi.SearchStopRequest} request
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
      * @throws {@link ToplasApi.UnprocessableEntityError}
      *
      * @example
-     *     await toplasApi.searchStop({
+     *     await client.searchStop({
      *         query: "query"
      *     })
      */
@@ -1062,14 +1306,18 @@ class ToplasApiClient {
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
             });
             if (_response.ok) {
-                return yield serializers.searchStop.Response.parseOrThrow(_response.body, {
+                return serializers.searchStop.Response.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -1079,7 +1327,7 @@ class ToplasApiClient {
             if (_response.error.reason === "status-code") {
                 switch (_response.error.statusCode) {
                     case 422:
-                        throw new ToplasApi.UnprocessableEntityError(yield serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        throw new ToplasApi.UnprocessableEntityError(serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,

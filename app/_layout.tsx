@@ -86,6 +86,7 @@ export default function RootLayout() {
         <Stack.Screen name="lines/[code]/announcements" />
         <Stack.Screen name="lines/search" />
         <Stack.Screen name="bus/[vehicleDoorNo]" />
+        <Stack.Screen name="fleet" />
       </Stack>
     </GestureHandlerRootView>
   );

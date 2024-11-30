@@ -9,5 +9,7 @@ export * as liveBusesOnRoute from "./liveBusesOnRoute";
 export * as lineAnnouncementsLiveLineLineCodeAnnouncementsGet from "./lineAnnouncementsLiveLineLineCodeAnnouncementsGet";
 export * as stopArrivals from "./stopArrivals";
 export * as stopAnnouncementsLiveStopStopCodeAnnouncementsGet from "./stopAnnouncementsLiveStopStopCodeAnnouncementsGet";
+export * as getFleetFleetGet from "./getFleetFleetGet";
+export * as getBusTasksBusVehicleDoorNoTasksGet from "./getBusTasksBusVehicleDoorNoTasksGet";
 export * as searchRoute from "./searchRoute";
 export * as searchStop from "./searchStop";

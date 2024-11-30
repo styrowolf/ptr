@@ -25,23 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NearbyStop = void 0;
 const core = __importStar(require("../../core"));
+const Coordinates_1 = require("./Coordinates");
 exports.NearbyStop = core.serialization.object({
     stopName: core.serialization.property("stop_name", core.serialization.string()),
     stopCode: core.serialization.property("stop_code", core.serialization.number()),
     stopId: core.serialization.property("stop_id", core.serialization.number()),
-    coordinates: core.serialization.lazyObject(() => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(() => __importStar(require("..")))).Coordinates; })),
+    coordinates: Coordinates_1.Coordinates,
     direction: core.serialization.string(),
     distance: core.serialization.number(),
 });

@@ -28,4 +28,5 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.serialization = void 0;
 __exportStar(require("./fetcher"), exports);
+__exportStar(require("./runtime"), exports);
 exports.serialization = __importStar(require("./schemas"));

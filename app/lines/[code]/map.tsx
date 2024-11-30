@@ -136,7 +136,7 @@ export default function LineMapPage() {
               />
             );
           })}
-        {liveLine.map((e, i) => {
+        {liveLine.filter((bus) => bus.routeCode == routeCode).map((e, i) => {
           return <BusMarker key={`${e.vehicleDoorNo}-${i}`} bus={e} />;
         })}
       </MapLibreGL.MapView>

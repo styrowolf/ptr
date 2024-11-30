@@ -150,7 +150,7 @@ export class ToplasPreferences {
 
   public static getMapStyleUrl(): string {
     const style = this.getMapStyle();
-    return `https://api.toplas.xyz/maplibre_styles/${style}.json`;
+    return `https://fra-1.toplas.xyz/maplibre_styles/${style}.json`;
   }
 
   // Language

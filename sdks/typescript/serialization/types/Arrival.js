@@ -25,18 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Arrival = void 0;
 const core = __importStar(require("../../core"));
+const Coordinates_1 = require("./Coordinates");
+const Amenities_1 = require("./Amenities");
 exports.Arrival = core.serialization.object({
     lineCode: core.serialization.property("line_code", core.serialization.string()),
     routeCode: core.serialization.property("route_code", core.serialization.string()),
@@ -44,8 +37,8 @@ exports.Arrival = core.serialization.object({
     vehicleDoorNo: core.serialization.property("vehicle_door_no", core.serialization.string()),
     lastLocationTime: core.serialization.property("last_location_time", core.serialization.string()),
     lastSpeed: core.serialization.property("last_speed", core.serialization.number()),
-    lastLocation: core.serialization.property("last_location", core.serialization.lazyObject(() => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(() => __importStar(require("..")))).Coordinates; }))),
+    lastLocation: core.serialization.property("last_location", Coordinates_1.Coordinates),
     stopOrder: core.serialization.property("stop_order", core.serialization.number()),
     minutesUntilArrival: core.serialization.property("minutes_until_arrival", core.serialization.number()),
-    amenities: core.serialization.lazyObject(() => __awaiter(void 0, void 0, void 0, function* () { return (yield Promise.resolve().then(() => __importStar(require("..")))).Amenities; })),
+    amenities: Amenities_1.Amenities,
 });

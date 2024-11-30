@@ -100,8 +100,8 @@ class OfflineMapManager {
     }
 
     async _notify() {
-        // for debugging: console.log("Notifying", this.isTherePack ? this.status : undefined);
         if (this.listener) {
+            console.log("Notifying", this.isTherePack ? this.status : undefined);
             await this.listener(this.isTherePack ? this.status : undefined);
         }
     }

@@ -6,12 +6,14 @@ import {
   Touchable,
   TouchableOpacity,
   Modal,
+  useWindowDimensions,
+  Platform,
 } from "react-native";
 import MapLibreGL from "@maplibre/maplibre-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { ToplasAPICache, ToplasPreferences } from "../storage";
 import {
   getBounds,
@@ -24,6 +26,9 @@ import {
 import * as turf from "@turf/turf";
 import { ToplasDataProvider } from "../provider";
 import { useTranslation } from "react-i18next";
+import appStyles from "../styles";
+import Divider from "../components/divider";
+import { ScrollView } from "react-native-gesture-handler";
 
 // Will be null for most users (only Mapbox authenticates this way).
 // Required on Android. See Android installation notes.
@@ -34,13 +39,32 @@ const MAP_BOUNDS = { ne: [27.970848, 40.737673], sw: [29.958805, 41.671] };
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    //justifyContent: "center",
+    //alignItems: "center",
+    //backgroundColor: "#F5FCFF",
   },
   map: {
-    flex: 1,
+    //flex: 1,
     alignSelf: "stretch",
+    //flexGrow: 1,
+  },
+  text: {
+    padding: 4,
+    ...appStyles.t16
+  },
+  linesTableText: {
+    fontSize: 20,
+    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    fontWeight: "bold",
+  },
+  arrivalItem: {
+    padding: 4,
+    fontSize: 16,
+    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+  },
+  arrivalsHeader: {
+    fontSize: 16,
+    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
   },
 });
 
@@ -61,6 +85,7 @@ function makeGeojson(stops: ToplasApi.LineStop[]) {
 export default function BusPage() {
   const { t } = useTranslation([], { keyPrefix: "bus" });
   const { vehicleDoorNo, lineCode, routeCode } = useLocalSearchParams();
+  const { height } = useWindowDimensions();
 
   const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(
     ToplasAPICache.getLineInfo(lineCode as string),
@@ -72,6 +97,9 @@ export default function BusPage() {
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const cameraRef = useRef<MapLibreGL.CameraRef | null>();
   const [bus, setBus] = useState<ToplasApi.LiveBusIndividual | null>(null);
+  const [vehicleTasks, setVehicleTasks] = useState<ToplasApi.VehicleTask[]>([]);
+  const [showVehicleInfo, setShowVehicleInfo] = useState(false);
+  const [showVehicleTasks, setShowVehicleTasks] = useState(false);
 
   const bounds = getBounds(routeStops);
   const [lastTappedStopIndex, setLastTappedStopIndex] = useState<number | null>(
@@ -80,7 +108,7 @@ export default function BusPage() {
   const geojson = useMemo(() => makeGeojson(routeStops), [routeStops]);
 
   useEffect(() => {
-    if (!lineInfo) {
+    if (!lineInfo && lineCode) {
       const lineInfo = ToplasDataProvider.getLineInfo(lineCode as string);
 
       lineInfo.then((val) => {
@@ -96,6 +124,10 @@ export default function BusPage() {
         setBus(val);
       });
     }
+
+    ToplasDataProvider.getVehicleTasks(vehicleDoorNo as string).then((val) => {
+      setVehicleTasks(val);
+    });
 
     getLiveData();
 
@@ -120,8 +152,16 @@ export default function BusPage() {
           title: `${t("bus")} ${vehicleDoorNo}`,
         }}
       />
+      <View style={{ paddingHorizontal: 10, paddingTop: 10 }} >
+        <TouchableOpacity onPress={() => { setShowVehicleInfo(!showVehicleInfo); }}><Text style={styles.text}>{t('vehicleInfo')}</Text></TouchableOpacity>
+        { showVehicleInfo && <VehicleInfo bus={bus} /> }
+        <Divider height={20} />
+        <TouchableOpacity onPress={() => { setShowVehicleTasks(!showVehicleTasks); }}><Text style={styles.text}>{t('vehicleTrips')}</Text></TouchableOpacity>
+        { showVehicleTasks && <VehicleTasks tasks={vehicleTasks} /> }
+        <Divider height={20} />
+      </View>
       <MapLibreGL.MapView
-        style={styles.map}
+        style={[styles.map, { height: height }]}
         logoEnabled={true}
         styleURL={ToplasPreferences.getMapStyleUrl()}
         ref={(r) => (mapRef.current = r)}
@@ -257,5 +297,80 @@ function BusMarker({ bus }: { bus: ToplasApi.LiveBusIndividual }) {
         </View>
       </TouchableOpacity>
     </MapLibreGL.MarkerView>
+  );
+}
+
+function VehicleInfo({ bus }: { bus: ToplasApi.LiveBusIndividual | null }) {
+  const { t } = useTranslation([], { keyPrefix: "bus" });
+  const showSeating = bus?.vehicleInfo.seatingCapacity != null 
+    || bus?.vehicleInfo.fullCapacity != null 
+    || bus?.vehicleInfo.seatingCapacity != 0 
+    || bus?.vehicleInfo.fullCapacity != 0;
+  return (
+    <>
+      <Text style={styles.text}>{t("plate")}: {bus?.vehiclePlate}</Text>
+      <Text style={styles.text}>{t("model")}: {bus?.vehicleInfo.brandName} {bus?.vehicleInfo.year}</Text>
+      {showSeating && (
+        <Text style={styles.text}>
+          {t("capacity")}: {bus?.vehicleInfo.seatingCapacity} {t("seated")} / {bus!.vehicleInfo.fullCapacity - bus!.vehicleInfo.seatingCapacity} {t("standing")}
+        </Text>
+      )}
+      <Text style={styles.text}>{t("operator")}: {bus?.vehicleInfo.operator}</Text>
+      <View style={{ flexDirection: "column" }}>
+        {bus?.amenities.wifi && <Text style={styles.text}>{t("wifi")} <FontAwesome5 name="wifi" size={16} /></Text>}
+        {bus?.amenities.airConditioning && <Text style={styles.text}>{t("airConditioning")} <Entypo name="air" size={16} /></Text>}
+        {bus?.amenities.wheelchairAccessible && <Text style={styles.text}>{t("accessible")} <FontAwesome6 name="wheelchair" size={16} /></Text>}
+        {bus?.amenities.bicycle && <Text style={styles.text}>{t("bicycle")} <FontAwesome5 name="bicycle" size={16} /></Text>}
+        {bus?.amenities.usb && <Text style={styles.text}>{t("usbCharging")} <FontAwesome5 name="usb" size={16} /></Text>}
+      </View>
+    </>
+  );
+}
+
+function VehicleTasks({ tasks }: { tasks: ToplasApi.VehicleTask[] }) {
+  const { width } = useWindowDimensions();
+
+  return (
+    <ScrollView style={{ maxHeight: 80/3 * 4 }}>
+      {tasks.map((task, i) => {
+        return (
+          <View
+          key={`${task.routeCode}-${i}`}
+          style={{ flexDirection: "row", flex: 1 }}
+        >
+          <Text style={[{flex: 3}, styles.linesTableText]}>
+            <Link
+              push
+              onPress={() =>
+                ToplasPreferences.appendRecentLine({
+                  lineCode: task.lineCode,
+                  routeCode: task.routeCode,
+                })
+              }
+              href={{
+                pathname: "/lines/[code]",
+                params: {
+                  code: task.lineCode,
+                  routeCode: task.routeCode,
+                },
+              }}
+            >
+              {task.lineCode}
+            </Link>
+          </Text>
+          <Text
+            style={[{ flex: 12 }, styles.arrivalItem]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {task.lineName}
+          </Text>
+          <Text style={[{ flex: 3 }, styles.arrivalItem]}>
+            {task.taskStartTime}
+          </Text>
+        </View>
+        );
+      })}
+    </ScrollView>
   );
 }

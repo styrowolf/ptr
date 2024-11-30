@@ -4,7 +4,8 @@
     "findLines": "hat ara",
     "findStops": "durak ara",
     "recents": "Son Arananlar",
-    "direction": "Yön"
+    "direction": "Yön",
+    "viewFleet": "araç filosu"
   },
   "nearbyStops": {
     "title": "Yakındaki Duraklar",
@@ -43,7 +44,20 @@
     "announcementsUnavailable": "Şu anda bu hat ile ilgili duyurulara ulaşılamıyor."
   },
   "bus": {
-    "bus": "Otobüs"
+    "bus": "Otobüs",
+    "vehicleInfo": "Araç Bilgileri",
+    "vehicleTrips": "Araç Seferleri",
+    "plate": "Plaka",
+    "model": "Model",
+    "capacity": "Kapasite",
+    "seated": "koltuk",
+    "standing": "ayakta",
+    "operator": "Operatör",
+    "accessible": "Erişilebilir",
+    "wifi": "Wifi",
+    "airConditioning": "Klima",
+    "usbCharging": "USB Şarj",
+    "bicycle": "Bisiklet"
   },
   "stops": {
     "loading": "Yükleniyor...",
@@ -85,5 +99,9 @@
     "mapDataSize": "Kapladığı alan",
     "deleteAllMapData": "Tüm harita verilerini sil",
     "invalidatePack": "Harita verisini güncelle"
+  },
+  "fleet": {
+    "title": "Otobüs Filosu",
+    "searchPlaceholder": "araç kapı numarası ile ara"
   }
 }

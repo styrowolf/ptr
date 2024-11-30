@@ -5,7 +5,7 @@ info:
 servers:
   - url: /api
 paths:
-  "":
+  /:
     get:
       summary: Read Root
       operationId: read_root__get
@@ -449,6 +449,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /fleet:
+    get:
+      summary: Get Fleet
+      operationId: get_fleet_fleet_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+                title: Response Get Fleet Fleet Get
+  /bus/{vehicle_door_no}/tasks:
+    get:
+      summary: Get Bus Tasks
+      operationId: get_bus_tasks_bus__vehicle_door_no__tasks_get
+      parameters:
+        - name: vehicle_door_no
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Vehicle Door No
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VehicleTask'
+                title: Response Get Bus Tasks Bus  Vehicle Door No  Tasks Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /search/line:
     get:
       summary: Search Route
@@ -792,6 +833,10 @@ components:
         speed:
           type: number
           title: Speed
+        amenities:
+          $ref: '#/components/schemas/Amenities'
+        vehicle_info:
+          $ref: '#/components/schemas/VehicleInfo'
       type: object
       required:
         - vehicle_door_no
@@ -799,6 +844,8 @@ components:
         - last_location
         - vehicle_plate
         - speed
+        - amenities
+        - vehicle_info
       title: LiveBusIndividual
     NearbyStop:
       properties:
@@ -1040,3 +1087,55 @@ components:
         - msg
         - type
       title: ValidationError
+    VehicleInfo:
+      properties:
+        operator:
+          type: string
+          title: Operator
+        brand_name:
+          type: string
+          title: Brand Name
+        seating_capacity:
+          type: integer
+          title: Seating Capacity
+        full_capacity:
+          type: integer
+          title: Full Capacity
+        year:
+          type: integer
+          title: Year
+        vehicle_type:
+          type: string
+          title: Vehicle Type
+      type: object
+      required:
+        - operator
+        - brand_name
+        - seating_capacity
+        - full_capacity
+        - year
+        - vehicle_type
+      title: VehicleInfo
+    VehicleTask:
+      properties:
+        line_code:
+          type: string
+          title: Line Code
+        route_code:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Route Code
+        line_name:
+          type: string
+          title: Line Name
+        task_start_time:
+          type: string
+          title: Task Start Time
+      type: object
+      required:
+        - line_code
+        - route_code
+        - line_name
+        - task_start_time
+      title: VehicleTask

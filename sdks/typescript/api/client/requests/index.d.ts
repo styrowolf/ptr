@@ -1,5 +1,5 @@
-export { LineStopsLineLineCodeStopsGetRequest } from "./LineStopsLineLineCodeStopsGetRequest";
-export { NearbyStopsStopsGetRequest } from "./NearbyStopsStopsGetRequest";
-export { LinesOnStopStopStopCodeLinesGetRequest } from "./LinesOnStopStopStopCodeLinesGetRequest";
-export { SearchRouteRequest } from "./SearchRouteRequest";
-export { SearchStopRequest } from "./SearchStopRequest";
+export { type LineStopsLineLineCodeStopsGetRequest } from "./LineStopsLineLineCodeStopsGetRequest";
+export { type NearbyStopsStopsGetRequest } from "./NearbyStopsStopsGetRequest";
+export { type LinesOnStopStopStopCodeLinesGetRequest } from "./LinesOnStopStopStopCodeLinesGetRequest";
+export { type SearchRouteRequest } from "./SearchRouteRequest";
+export { type SearchStopRequest } from "./SearchStopRequest";

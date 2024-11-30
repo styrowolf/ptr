@@ -2,7 +2,7 @@ import { ToplasApi, ToplasApiClient } from "@/sdks/typescript";
 
 export class ToplasDataProvider {
   static client = new ToplasApiClient({
-    environment: () => "https://api.toplas.xyz",
+    environment: () => "https://fra-1.toplas.xyz/",
   });
 
   static async getLineInfo(code: string): Promise<ToplasApi.LineInfo> {
@@ -56,5 +56,13 @@ export class ToplasDataProvider {
     vehicleDoorNo: string,
   ): Promise<ToplasApi.LiveBusIndividual> {
     return this.client.busLocationLiveBusVehicleDoorNoGet(vehicleDoorNo);
+  }
+
+  static getVehicleTasks(vehicleDoorNo: string): Promise<ToplasApi.VehicleTask[]> {
+    return this.client.getBusTasksBusVehicleDoorNoTasksGet(vehicleDoorNo);
+  }
+
+  static getFleet(): Promise<string[]> {
+    return this.client.getFleetFleetGet()
   }
 }

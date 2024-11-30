@@ -4,7 +4,8 @@
     "findLines": "find lines",
     "findStops": "find stops",
     "recents": "Recents",
-    "direction": "Direction"
+    "direction": "Direction",
+    "viewFleet": "view fleet"
   },
   "nearbyStops": {
     "title": "Nearby Stops",
@@ -43,7 +44,20 @@
     "announcementsUnavailable": "Announcements for this line cannot be retrieved at the moment."
   },
   "bus": {
-    "bus": "Bus"
+    "bus": "Bus",
+    "vehicleInfo": "Vehicle Info",
+    "vehicleTrips": "Vehicle Trips",
+    "plate": "Plate",
+    "model": "Model",
+    "capacity": "Capacity",
+    "seated": "seated",
+    "standing": "standing",
+    "operator": "Operator",
+    "accessible": "Accessible",
+    "wifi": "Wifi",
+    "airConditioning": "Air Conditioning",
+    "usbCharging": "USB Charging",
+    "bicycle": "Bicycle"
   },
   "stops": {
     "loading": "Loading...",
@@ -85,5 +99,9 @@
     "mapDataSize": "Data Size",
     "deleteAllMapData": "Delete all map data",
     "invalidatePack": "Update map data"
+  },
+  "fleet": {
+    "title": "Fleet",
+    "searchPlaceholder": "search by vehicle door code"
   }
 }

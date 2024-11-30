@@ -36,3 +36,5 @@ __exportStar(require("./StopInfo"), exports);
 __exportStar(require("./TimetableTrip"), exports);
 __exportStar(require("./ValidationErrorLocItem"), exports);
 __exportStar(require("./ValidationError"), exports);
+__exportStar(require("./VehicleInfo"), exports);
+__exportStar(require("./VehicleTask"), exports);

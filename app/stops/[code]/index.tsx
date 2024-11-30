@@ -1,7 +1,7 @@
 import { ToplasApi } from "@/sdks/typescript";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, Platform } from "react-native";
+import { View, Text, SafeAreaView, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Octicons } from "@expo/vector-icons";
 import Divider from "@/app/components/divider";
@@ -52,6 +52,7 @@ export default function StopPage() {
   const [stopInfo, setStopInfo] = useState<ToplasApi.StopInfo | null>(null);
   const [error, setError] = useState(null);
   const [arrivals, setArrivals] = useState<ToplasApi.Arrival[]>([]);
+  const [showLines, setShowLines] = useState(true);
 
   useEffect(() => {
     const stopInfo = ToplasDataProvider.getStopInfo(Number(code));
@@ -112,8 +113,8 @@ export default function StopPage() {
           </Link>
           <Divider height={20} />
           <View>
-            <Text style={styles.text}>{t("lines")}</Text>
-            {chunkedLines.map((chunk, i) => (
+            <TouchableOpacity onPress={() => setShowLines(!showLines)}><Text style={styles.text}>{t("lines")}</Text></TouchableOpacity>
+            {showLines && chunkedLines.map((chunk, i) => (
               <View
                 key={`${chunk.map((e) => e.routeCode).join("-")}-${i}`}
                 style={{ flexDirection: "row" }}

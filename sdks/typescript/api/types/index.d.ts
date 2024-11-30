@@ -20,3 +20,5 @@ export * from "./StopInfo";
 export * from "./TimetableTrip";
 export * from "./ValidationErrorLocItem";
 export * from "./ValidationError";
+export * from "./VehicleInfo";
+export * from "./VehicleTask";

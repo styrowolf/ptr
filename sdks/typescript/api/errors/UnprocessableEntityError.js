@@ -27,7 +27,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnprocessableEntityError = void 0;
-const errors = __importStar(require("../../errors"));
+const errors = __importStar(require("../../errors/index"));
 class UnprocessableEntityError extends errors.ToplasApiError {
     constructor(body) {
         super({

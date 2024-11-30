@@ -128,6 +128,17 @@ function RecentsWidget() {
           </View>
         </TouchableOpacity>
         <Divider height={20} />
+        <TouchableOpacity onPress={() => router.push("/fleet")}>
+          <View style={{ flexDirection: "row" }}>
+            <FontAwesome6
+              name="bus-simple"
+              size={24}
+              style={{ width: 44, paddingLeft: 2, alignSelf: "center" }}
+            />
+            <Text style={styles.subtitle}>{t('viewFleet')}</Text>
+          </View>
+        </TouchableOpacity>
+        <Divider height={20} />
         <TouchableOpacity onPress={() => router.push("/stops/search")}>
           <View style={{ flexDirection: "row" }}>
             <FontAwesome

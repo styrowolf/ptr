@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchStop = exports.searchRoute = exports.stopAnnouncementsLiveStopStopCodeAnnouncementsGet = exports.stopArrivals = exports.lineAnnouncementsLiveLineLineCodeAnnouncementsGet = exports.liveBusesOnRoute = exports.linesOnStopStopStopCodeLinesGet = exports.nearbyStopsStopsGet = exports.routeTimetableRouteRouteCodeTimetableGet = exports.routeStopsRouteRouteCodeStopsGet = exports.timetableLineLineCodeTimetableGet = exports.routesLineLineCodeRoutesGet = exports.lineStopsLineLineCodeStopsGet = void 0;
+exports.searchStop = exports.searchRoute = exports.getBusTasksBusVehicleDoorNoTasksGet = exports.getFleetFleetGet = exports.stopAnnouncementsLiveStopStopCodeAnnouncementsGet = exports.stopArrivals = exports.lineAnnouncementsLiveLineLineCodeAnnouncementsGet = exports.liveBusesOnRoute = exports.linesOnStopStopStopCodeLinesGet = exports.nearbyStopsStopsGet = exports.routeTimetableRouteRouteCodeTimetableGet = exports.routeStopsRouteRouteCodeStopsGet = exports.timetableLineLineCodeTimetableGet = exports.routesLineLineCodeRoutesGet = exports.lineStopsLineLineCodeStopsGet = void 0;
 exports.lineStopsLineLineCodeStopsGet = __importStar(require("./lineStopsLineLineCodeStopsGet"));
 exports.routesLineLineCodeRoutesGet = __importStar(require("./routesLineLineCodeRoutesGet"));
 exports.timetableLineLineCodeTimetableGet = __importStar(require("./timetableLineLineCodeTimetableGet"));
@@ -35,5 +35,7 @@ exports.liveBusesOnRoute = __importStar(require("./liveBusesOnRoute"));
 exports.lineAnnouncementsLiveLineLineCodeAnnouncementsGet = __importStar(require("./lineAnnouncementsLiveLineLineCodeAnnouncementsGet"));
 exports.stopArrivals = __importStar(require("./stopArrivals"));
 exports.stopAnnouncementsLiveStopStopCodeAnnouncementsGet = __importStar(require("./stopAnnouncementsLiveStopStopCodeAnnouncementsGet"));
+exports.getFleetFleetGet = __importStar(require("./getFleetFleetGet"));
+exports.getBusTasksBusVehicleDoorNoTasksGet = __importStar(require("./getBusTasksBusVehicleDoorNoTasksGet"));
 exports.searchRoute = __importStar(require("./searchRoute"));
 exports.searchStop = __importStar(require("./searchStop"));
