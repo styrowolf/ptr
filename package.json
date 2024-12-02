@@ -26,6 +26,7 @@
     "@react-navigation/native": "^6.0.2",
     "@turf/turf": "^7.0.0",
     "expo": "~51.0.23",
+    "expo-asset": "~10.0.10",
     "expo-constants": "~16.0.2",
     "expo-dev-client": "~4.0.21",
     "expo-font": "~12.0.9",
@@ -51,7 +52,8 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.10",
     "use-debounce": "^10.0.2",
-    "expo-asset": "~10.0.10"
+    "expo-device": "~6.0.2",
+    "expo-application": "~5.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

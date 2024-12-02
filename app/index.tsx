@@ -1,10 +1,11 @@
-import { Link, router, Stack, useNavigation, usePathname } from "expo-router";
+import { Link, router, Stack, useGlobalSearchParams, useNavigation, usePathname, useRootNavigationState } from "expo-router";
 import {
   Platform,
   SafeAreaView,
   StyleProp,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
   ViewStyle,
 } from "react-native";

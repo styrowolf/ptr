@@ -11,11 +11,10 @@ import {
     Platform,
     TouchableOpacity,
     KeyboardAvoidingView,
-  } from "react-native";
-  import { ScrollView } from "react-native-gesture-handler";
-  import { useDebounce } from "use-debounce";
-  import { useHeaderHeight } from "@react-navigation/elements";
-  import { useTranslation } from "react-i18next";
+} from "react-native";
+import { useDebounce } from "use-debounce";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   searchBox: {

@@ -1,5 +1,5 @@
 import { ToplasApi } from "@/sdks/typescript";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -65,6 +65,7 @@ export default function LinePage() {
   const { t, i18n } = useTranslation([], { keyPrefix: "lines" });
   const flexValues = i18n.resolvedLanguage == "tr" ? [6, 7, 7] : [2, 3, 4];
   const { code, routeCode } = useLocalSearchParams();
+  const navigation = useNavigation();
 
   const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(null);
   const [error, setError] = useState(null);
@@ -79,6 +80,8 @@ export default function LinePage() {
         lineCode: code as string,
         routeCode: selectedRoute.routeCode,
       });
+      // @ts-ignore
+      navigation.setParams({ routeCode: selectedRoute.routeCode });
     }
   }, [selectedRoute]);
 
@@ -154,7 +157,9 @@ export default function LinePage() {
               data={lineInfo.routes}
               labelField="routeName"
               valueField="routeCode"
-              onChange={(e) => setSelectedRoute(e)}
+              onChange={(e) => {
+                setSelectedRoute(e);
+              }}
             />
             {oppositeRoute && (
               <>

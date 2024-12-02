@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, useNavigation } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapLibreGL from "@maplibre/maplibre-react-native";
@@ -13,6 +13,7 @@ import "intl-pluralrules";
 import enTranslation from "./locales/en/translation.json";
 import trTranslation from "./locales/tr/translation.json";
 import ToplasLanguageModule from "./languageProvider";
+import plausible from "./plausible";
 // i18n imports end
 
 SplashScreen.preventAutoHideAsync();
@@ -43,6 +44,24 @@ i18n
   });
 // i18n init end
 
+function reconstructUrl(url: string, params?: Record<string, string>) {
+  if (params) {
+    const matches: string[] = [];
+    const fix = url.replace(/\[(\w+)\]/g, (matched, key) => {
+      matches.push(matched.slice(1, -1));
+      return params[key];
+    }).replace("/index", "").replace("index", "");
+    const routeCodeAsQuery = Object.entries(params).filter(([k, _]) => k == "routeCode").map(([k, v]) => `${k}=${v}`).join("&");
+    if (routeCodeAsQuery && routeCodeAsQuery.length > 0) {
+      return `/${fix}?${routeCodeAsQuery}`;
+    } else {
+      return `/${fix}`;
+    }
+  }  else {
+    return `/${url.replace("/index", "").replace("index", "")}`;
+  }
+}
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     "IBMPlexMono-BI": IBMPlexMono_700Bold_Italic,
@@ -72,6 +91,21 @@ export default function RootLayout() {
             fontFamily: "IBMPlexMono-BI",
             color: "white",
           },
+        }}
+        screenListeners={{
+          state: (s) => {
+            // magic to track pageviews + routeCodes
+            const copied = Object.assign({}, s.data.state.routes);
+            const urls = Object.entries(copied).map(([k, v]) => [k, v, v.name, v.params]);
+            // @ts-ignore
+            const urlsReconstructed = urls.map(([a, b, n, p]) => reconstructUrl(n, p));
+            const lastTwo = urlsReconstructed.slice(-2);
+            if (lastTwo.length == 1) {
+              plausible.trackPageview(lastTwo[0]);
+            } else {
+              plausible.trackPageview(lastTwo[1], lastTwo[0]);
+            }
+          },          
         }}
       >
         <Stack.Screen name="index" options={{ title: "toplaş" }} />

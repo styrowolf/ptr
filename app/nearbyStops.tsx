@@ -25,6 +25,7 @@ import { ToplasDataProvider } from "./provider";
 import { ToplasPreferences } from "./storage";
 import { useTranslation } from "react-i18next";
 import appStyles from "./styles";
+import plausible from "./plausible";
 
 const styles = StyleSheet.create({
   view: {
@@ -93,6 +94,7 @@ function differentEnough(a: ToplasApi.Coordinates, b: ToplasApi.Coordinates) {
 
 export default function NearbyStops() {
   const { t } = useTranslation([], { keyPrefix: "nearbyStops" });
+
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const userLocationRef = useRef<MapLibreGL.UserLocationRef | null>();
   const cameraRef = useRef<MapLibreGL.CameraRef | null>();
