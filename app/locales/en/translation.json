@@ -57,7 +57,10 @@
     "wifi": "Wifi",
     "airConditioning": "Air Conditioning",
     "usbCharging": "USB Charging",
-    "bicycle": "Bicycle"
+    "bicycle": "Bicycle",
+    "busInformationUnavailable": "Bus information cannot be retrieved at the moment.",
+    "loading": "Loading...",
+    "noTrips": "No trips found for this vehicle."
   },
   "stops": {
     "loading": "Loading...",

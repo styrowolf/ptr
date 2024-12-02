@@ -57,7 +57,10 @@
     "wifi": "Wifi",
     "airConditioning": "Klima",
     "usbCharging": "USB Şarj",
-    "bicycle": "Bisiklet"
+    "bicycle": "Bisiklet",
+    "busInformationUnavailable": "Bu aracın bilgilerine ulaşılamıyor.",
+    "loading": "Yükleniyor...",
+    "noTrips": "Bu araç için sefer bulunamadı."
   },
   "stops": {
     "loading": "Yükleniyor...",
@@ -73,7 +76,7 @@
   "stopAnnouncements": {
     "title": "Duyurular",
     "loading": "Yükleniyor...",
-    "noAnnouncements": "Bu durak için duyuru bulunamadı",
+    "noAnnouncements": "Bu durak için duyuru bulunamadı.",
     "announcementsUnavailable": "Şu anda bu durak ile ilgili duyurulara ulaşılamıyor.",
     "line": "Hat",
     "announcement": "Duyuru",

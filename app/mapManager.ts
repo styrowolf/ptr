@@ -32,7 +32,11 @@ class OfflineMapManager {
             this.initialized = true;
             this.isTherePack = true;
             this.lastPackName = this.isTherePack ? packs[0].name : null;
-            this.status = { pack: packs[0], status: await packs[0].status() };
+            const pack = await MapLibreGL.offlineManager.getPack(packs[0].name!);
+            await pack.resume();
+            let status = await pack.status();
+            this.status = { pack: packs[0], status };
+            await this._notify();
         }
     }
 
@@ -40,6 +44,7 @@ class OfflineMapManager {
         await this.initialize();
         this.listener = listener;
         this._notify();
+        await this._setupMaplibreSubscription();
     }
 
     async unsubscribe() {
@@ -101,7 +106,7 @@ class OfflineMapManager {
 
     async _notify() {
         if (this.listener) {
-            console.log("Notifying", this.isTherePack ? this.status : undefined);
+            //console.log("Notifying", this.isTherePack ? this.status : undefined);
             await this.listener(this.isTherePack ? this.status : undefined);
         }
     }

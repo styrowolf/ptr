@@ -29,12 +29,18 @@ import { useTranslation } from "react-i18next";
 import appStyles from "../styles";
 import Divider from "../components/divider";
 import { ScrollView } from "react-native-gesture-handler";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { use } from "i18next";
+import { set } from "@/sdks/typescript/core/schemas";
+import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Will be null for most users (only Mapbox authenticates this way).
 // Required on Android. See Android installation notes.
 MapLibreGL.setAccessToken(null);
 
 const MAP_BOUNDS = { ne: [27.970848, 40.737673], sw: [29.958805, 41.671] };
+const BUS_PAGE_MAP_DEF_BOUNDS = { ne: [27.970848 + 0.5, 40.737673 + 0.5], sw: [29.958805 - 0.5, 41.671 -0.5] };
 
 const styles = StyleSheet.create({
   page: {
@@ -85,7 +91,7 @@ function makeGeojson(stops: ToplasApi.LineStop[]) {
 export default function BusPage() {
   const { t } = useTranslation([], { keyPrefix: "bus" });
   const { vehicleDoorNo, lineCode, routeCode } = useLocalSearchParams();
-  const { height } = useWindowDimensions();
+  const { bottom } = useSafeAreaInsets();
 
   const [lineInfo, setLineInfo] = useState<ToplasApi.LineInfo | null>(
     ToplasAPICache.getLineInfo(lineCode as string),
@@ -96,16 +102,28 @@ export default function BusPage() {
 
   const mapRef = useRef<MapLibreGL.MapViewRef | null>();
   const cameraRef = useRef<MapLibreGL.CameraRef | null>();
+  const [isCameraRefSet, setIsCameraRefSet] = useState<boolean>(false);
   const [bus, setBus] = useState<ToplasApi.LiveBusIndividual | null>(null);
   const [vehicleTasks, setVehicleTasks] = useState<ToplasApi.VehicleTask[]>([]);
   const [showVehicleInfo, setShowVehicleInfo] = useState(false);
   const [showVehicleTasks, setShowVehicleTasks] = useState(false);
+  const [vehicleInfoNotAvailable, setVehicleInfoNotAvailable] = useState(false);
 
-  const bounds = getBounds(routeStops);
+  const bottomSheetRef = useRef<BottomSheetMethods | null>(null);
+  
+  const bounds = useMemo(() => {
+    if (routeStops.length == 0) {
+      return BUS_PAGE_MAP_DEF_BOUNDS;
+    } else {
+      return getBounds(routeStops);
+    }
+  }, [routeStops]);
+
   const [lastTappedStopIndex, setLastTappedStopIndex] = useState<number | null>(
     null,
   );
   const geojson = useMemo(() => makeGeojson(routeStops), [routeStops]);
+  const showGeojson = useMemo(() => routeStops.length != 0, [routeStops]);
 
   useEffect(() => {
     if (!lineInfo && lineCode) {
@@ -122,28 +140,54 @@ export default function BusPage() {
       );
       bus.then((val) => {
         setBus(val);
+      }).catch((e) => {
+        setVehicleInfoNotAvailable(true);
       });
     }
 
     ToplasDataProvider.getVehicleTasks(vehicleDoorNo as string).then((val) => {
       setVehicleTasks(val);
-    });
-
+    }).catch((e) => {});
+  
     getLiveData();
-
+    
     const id = setInterval(getLiveData, 20000);
     return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
-    if (bus) {
+    if (bus && cameraRef.current) {
       cameraRef.current?.setCamera({
         zoomLevel: 14,
         centerCoordinate: [bus.lastLocation.x, bus.lastLocation.y],
         animationDuration: 1000,
       });
     }
-  }, [bus]);
+  }, [bus, isCameraRefSet]);
+
+  if (vehicleInfoNotAvailable) {
+    return (<View style={styles.page}>
+      <Stack.Screen
+        options={{
+          title: `${t("bus")} ${vehicleDoorNo}`,
+        }}
+      />
+      <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
+          <Text style={styles.text}>{t("busInformationUnavailable")}</Text>
+        </View>
+      </View>)
+  } else if (!lineInfo && !bus) {
+    return (<View style={styles.page}>
+      <Stack.Screen
+        options={{
+          title: `${t("bus")} ${vehicleDoorNo}`,
+        }}
+      />
+      <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 10 }}>
+          <Text style={styles.text}>{t("loading")}</Text>
+        </View>
+      </View>)
+  }
 
   return (
     <View style={styles.page}>
@@ -152,31 +196,26 @@ export default function BusPage() {
           title: `${t("bus")} ${vehicleDoorNo}`,
         }}
       />
-      <View style={{ paddingHorizontal: 10, paddingTop: 10 }} >
-        <TouchableOpacity onPress={() => { setShowVehicleInfo(!showVehicleInfo); }}><Text style={styles.text}>{t('vehicleInfo')}</Text></TouchableOpacity>
-        { showVehicleInfo && <VehicleInfo bus={bus} /> }
-        <Divider height={20} />
-        <TouchableOpacity onPress={() => { setShowVehicleTasks(!showVehicleTasks); }}><Text style={styles.text}>{t('vehicleTrips')}</Text></TouchableOpacity>
-        { showVehicleTasks && <VehicleTasks tasks={vehicleTasks} /> }
-        <Divider height={20} />
-      </View>
       <MapLibreGL.MapView
-        style={[styles.map, { height: height }]}
+        style={[styles.map, { flex: 1}]}
         logoEnabled={true}
         styleURL={ToplasPreferences.getMapStyleUrl()}
         ref={(r) => (mapRef.current = r)}
+        localizeLabels={true}
       >
         <MapLibreGL.Camera
           maxZoomLevel={MAX_ZOOM}
-          ref={(r) => (cameraRef.current = r)}
+          ref={(r) => { cameraRef.current = r; !isCameraRefSet && setIsCameraRefSet(true); }}
+          padding={getPadding(MAP_PADDING)}
           defaultSettings={{
-            bounds,
-            padding: getPadding(MAP_PADDING),
+              bounds: bounds,
+              zoomLevel: 12,
           }}
         />
 
         <MapLibreGL.UserLocation renderMode="native" />
-        <MapLibreGL.ShapeSource
+
+        {showGeojson && <MapLibreGL.ShapeSource
           id="stops"
           shape={geojson}
           hitbox={{ width: 44, height: 44 }}
@@ -191,7 +230,7 @@ export default function BusPage() {
             minZoomLevel={0}
             style={stopLayerStyle}
           />
-        </MapLibreGL.ShapeSource>
+        </MapLibreGL.ShapeSource>}
 
         {routeStops
           .filter((e, i) => lastTappedStopIndex == i)
@@ -206,8 +245,32 @@ export default function BusPage() {
           })}
         {bus && <BusMarker bus={bus} />}
       </MapLibreGL.MapView>
+      <BottomSheet snapPoints={[150, 300]} ref={(r) => bottomSheetRef.current = r}>
+        <View style={{ paddingHorizontal: 10, paddingTop: 10, marginBottom: bottom }}>
+          <TouchableOpacity onPress={() => { onPressVehicleSection(bottomSheetRef.current, showVehicleInfo, setShowVehicleInfo, showVehicleTasks, setShowVehicleTasks) }}><Text style={styles.text}>{t('vehicleInfo')}</Text></TouchableOpacity>
+          { showVehicleInfo && <VehicleInfo bus={bus} /> }
+          <Divider height={20} />
+          <TouchableOpacity onPress={() => { onPressVehicleSection(bottomSheetRef.current, showVehicleTasks, setShowVehicleTasks, showVehicleInfo, setShowVehicleInfo) }}><Text style={styles.text}>{t('vehicleTrips')}</Text></TouchableOpacity>
+          { showVehicleTasks && <VehicleTasks tasks={vehicleTasks} /> }
+          <Divider height={20} />
+        </View>
+      </BottomSheet>
     </View>
   );
+}
+
+function onPressVehicleSection(ref: BottomSheetMethods | null, self: boolean, setSelf: (b: boolean) => void, other: boolean, setOther: (b: boolean) => void) {
+  const nextState = !self;
+  if (nextState) {
+    setOther(false);
+    setSelf(true);
+    ref?.expand();
+  } else {
+    setSelf(false);
+    if (!other) {
+      ref?.collapse();
+    }
+  }
 }
 
 function StopMarker({
@@ -302,9 +365,7 @@ function BusMarker({ bus }: { bus: ToplasApi.LiveBusIndividual }) {
 
 function VehicleInfo({ bus }: { bus: ToplasApi.LiveBusIndividual | null }) {
   const { t } = useTranslation([], { keyPrefix: "bus" });
-  const showSeating = bus?.vehicleInfo.seatingCapacity != null 
-    || bus?.vehicleInfo.fullCapacity != null 
-    || bus?.vehicleInfo.seatingCapacity != 0 
+  const showSeating = bus?.vehicleInfo.seatingCapacity != 0 
     || bus?.vehicleInfo.fullCapacity != 0;
   return (
     <>
@@ -328,10 +389,12 @@ function VehicleInfo({ bus }: { bus: ToplasApi.LiveBusIndividual | null }) {
 }
 
 function VehicleTasks({ tasks }: { tasks: ToplasApi.VehicleTask[] }) {
-  const { width } = useWindowDimensions();
-
+  const { t } = useTranslation([], { keyPrefix: "bus" });
+  if (tasks.length == 0) {
+    return <Text style={styles.text}>{t('noTrips')}</Text>;
+  }
   return (
-    <ScrollView style={{ maxHeight: 80/3 * 4 }}>
+    <ScrollView style={{ maxHeight: 80/3 * 5 }}>
       {tasks.map((task, i) => {
         return (
           <View
