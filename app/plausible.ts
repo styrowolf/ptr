@@ -19,12 +19,12 @@ interface EventProps {
 
 function sendEvent(e: Event, apiHost: string) {
     const body = JSON.stringify({
-        d: e.domain,
-        n: e.name,
-        u: e.url,
-        r: e.referrer,
-        p: e.props,
-        w: e.deviceWidth,
+        domain: e.domain,
+        name: e.name,
+        url: e.url,
+        referrer: e.referrer,
+        props: e.props,
+        width: e.deviceWidth,
     });
     fetch(`${apiHost}/api/event`, {
         method: "POST",
@@ -48,13 +48,23 @@ function getUserAgent() {
     const appName = Application.applicationName;
     const appVersion = Application.nativeApplicationVersion;
     const appBuild = Application.nativeBuildVersion;
-    const ua = `${appName}/${appVersion} (${appBuild}) (${device}; ${os} ${osVersion} ${Device.supportedCpuArchitectures})`;
-    console.log(ua)
-    return ua;
+
+    if (os === "iOS") {
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1"
+        // example
+        const ua = `${appName}/${appVersion}:${appBuild} (iPhone; iPhone OS ${osVersion} ${Device.supportedCpuArchitectures}) (${device})`;
+        return ua;
+    } else {
+        "Mozilla/5.0 (Linux; Android 15; SM-A205U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.6778.81 Mobile Safari/537.36"
+        // example
+        const ua = `${appName}/${appVersion}:${appBuild} (Linux; Android ${osVersion} ${Device.supportedCpuArchitectures}) (${device})`;
+        return ua;
+    }
+
 }
 
 export function Plausible(options: PlausibleInitOptions) {
-    const isSimulator = false//!Device.isDevice;
+    const isSimulator =!Device.isDevice;
     const userAgent = getUserAgent();
     const width = Dimensions.get("window").width;
 
@@ -68,10 +78,12 @@ export function Plausible(options: PlausibleInitOptions) {
             deviceWidth: width,
             props: props,
         }
-        console.log(e)
-        if (!isSimulator) {
-            sendEvent(e, options.apiHost);
+
+        if (isSimulator) {
+            e.domain = "toplas-dev";
         }
+
+        sendEvent(e, options.apiHost);
     }
 
     function trackEvent(eventName: string, pathname: string, props: EventProps = {}) {
@@ -83,16 +95,19 @@ export function Plausible(options: PlausibleInitOptions) {
             deviceWidth: width,
             props: props,
         }
-        if (!isSimulator) {
-            sendEvent(e, options.apiHost);
+
+        if (isSimulator) {
+            e.domain = "toplas-dev";
         }
+        
+        sendEvent(e, options.apiHost);
     }
 
     return { trackPageview, trackEvent }
 }
 
 const plausible = Plausible({
-    domain: "ptr.com",
+    domain: "toplas",
     apiHost: "https://pl.fra-1.toplas.xyz",
 });
 
