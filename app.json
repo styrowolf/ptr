@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "ptr",
+    "name": "toplaş",
     "slug": "ptr",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "ptr",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -14,11 +14,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "town.kurt.ptr"
+      "bundleIdentifier": "town.kurt.ptr",
+      "config": {
+        "usesNonExemptEncryption": false,
+        "entitlements": {
+          "com.apple.security.personal-information.location": "Always"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       }
     },

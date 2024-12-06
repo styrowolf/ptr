@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   View,
   ViewStyle,
+  Alert
 } from "react-native";
 import {
   FontAwesome,
@@ -25,6 +26,9 @@ import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import appStyles from "./styles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Application from "expo-application";
+import { ToplasDataProvider } from "./provider";
 
 const styles = StyleSheet.create({
   text: appStyles.t16,
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 10,
+    marginTop: 10,
   },
   itemView: {
     flexDirection: "row",
@@ -62,7 +66,34 @@ const styles = StyleSheet.create({
   },
 });
 
+function alert(msg: string) {
+  Alert.alert(msg, undefined, [
+    { onPress: () => alert(msg) }
+  ]);
+}
+
 export default function Index() {
+  const { t } = useTranslation();
+  const [isVersionUsable, setIsVersionUsable] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const usableVersions: string[] = await ToplasDataProvider.getSupportedVersions();
+        if (Application.nativeApplicationVersion) {
+          const isVersionUsable = usableVersions.includes(Application.nativeApplicationVersion);
+          setIsVersionUsable(isVersionUsable);
+        }
+      } catch {}
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!isVersionUsable) {
+      alert(t('versionNotSupported'))
+    }
+  }, [isVersionUsable]);
+
   return (
     <View style={styles.view}>
       <RecentsWidget />
@@ -72,6 +103,7 @@ export default function Index() {
 
 function RecentsWidget() {
   const pathname = usePathname();
+  const { bottom } = useSafeAreaInsets();
   const { t } = useTranslation([], { keyPrefix: "home" });
 
   const [recentLines, setRecentLines] = useState<LineWithRoute[]>(
@@ -87,7 +119,7 @@ function RecentsWidget() {
   }, [pathname]);
 
   return (
-    <View style={[styles.view]}>
+    <View style={[styles.view, { marginBottom: bottom }]}>
       <Stack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -129,17 +161,6 @@ function RecentsWidget() {
           </View>
         </TouchableOpacity>
         <Divider height={20} />
-        <TouchableOpacity onPress={() => router.push("/fleet")}>
-          <View style={{ flexDirection: "row" }}>
-            <FontAwesome6
-              name="bus-simple"
-              size={24}
-              style={{ width: 44, paddingLeft: 2, alignSelf: "center" }}
-            />
-            <Text style={styles.subtitle}>{t('viewFleet')}</Text>
-          </View>
-        </TouchableOpacity>
-        <Divider height={20} />
         <TouchableOpacity onPress={() => router.push("/stops/search")}>
           <View style={{ flexDirection: "row" }}>
             <FontAwesome
@@ -150,6 +171,17 @@ function RecentsWidget() {
             <Text style={styles.subtitle}>{t("findStops")}</Text>
           </View>
         </TouchableOpacity>
+        <Divider height={20} />
+        <TouchableOpacity onPress={() => router.push("/fleet")}>
+          <View style={{ flexDirection: "row" }}>
+            <FontAwesome5
+              name="list-alt"
+              size={24}
+              style={{ width: 44, paddingLeft: 2, alignSelf: "center" }}
+            />
+            <Text style={styles.subtitle}>{t('viewFleet')}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <Text style={[styles.title, { paddingTop: 10 }]}>
         {t("recents")} <FontAwesome name="history" size={24} />
@@ -157,7 +189,8 @@ function RecentsWidget() {
       <Divider height={20} />
       <RecentLines lines={recentLines} />
       <Divider height={20} />
-      <ScrollView style={{ paddingBottom: 10, flexGrow: 1 }}>
+      <ScrollView style={{ flexGrow: 1 }}>
+        {recentStops.length == 0 && (<Text style={styles.text}>{t('noStopsExplanation')}</Text>)}
         {recentStops.map((e, i) => (
           <View key={`${e.stopCode}-${i}`} style={{ paddingVertical: 10 }}>
             <TouchableOpacity

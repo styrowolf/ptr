@@ -8,7 +8,6 @@ export interface LineStop {
     coordinates: ToplasApi.Coordinates;
     direction: string;
     lineCode: string;
-    lineId: number;
     routeCode: string;
     routeOrder: number;
     routeDirection: ToplasApi.Direction;

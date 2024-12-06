@@ -1,11 +1,13 @@
 {
+  "versionNotSupported": "Uygulamanın bu sürümü artık desteklenmiyor. Lütfen en son sürüme güncelleyin.",
   "home": {
     "nearbyStops": "yakındaki duraklar",
     "findLines": "hat ara",
     "findStops": "durak ara",
     "recents": "Son Arananlar",
     "direction": "Yön",
-    "viewFleet": "araç filosu"
+    "viewFleet": "araç filosu",
+    "noStopsExplanation": "Son ziyaret edilen duraklar burada görünür."
   },
   "nearbyStops": {
     "title": "Yakındaki Duraklar",

@@ -122,6 +122,7 @@ export default function StopPage() {
                 {arrayPad(chunk, 4, <View style={{ flex: 1 }}></View>).map(
                   (line: ToplasApi.LineOnStop) => (
                     <Link
+                      key={`${line.lineCode}-${line.routeCode}`}
                       push
                       style={[{ flex: 1 }, styles.linesTableText]}
                       onPress={() =>
@@ -150,13 +151,13 @@ export default function StopPage() {
             {t("arrivals")}
           </Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={[{ flex: 3 }, styles.arrivalsHeader]}>
+            <Text style={[{ width: 65 }, styles.arrivalsHeader]}>
               {t("line")}
             </Text>
-            <Text style={[{ flex: 12 }, styles.arrivalsHeader]}>
+            <Text style={[{ flex: 1 }, styles.arrivalsHeader]}>
               {t("lineName")}
             </Text>
-            <Text style={[{ flex: 2 }, styles.arrivalsHeader]}>
+            <Text style={[styles.arrivalsHeader]}>
               {t("mins")}
             </Text>
           </View>
@@ -166,47 +167,42 @@ export default function StopPage() {
                 key={`${arrival.routeCode}-${i}`}
                 style={{ flexDirection: "row" }}
               >
-                <Text style={[{ flex: 3 }, styles.linesTableText]}>
-                  <Link
-                    push
-                    onPress={() =>
-                      ToplasPreferences.appendRecentLine({
-                        lineCode: arrival.lineCode,
-                        routeCode: arrival.routeCode,
-                      })
-                    }
-                    href={{
-                      pathname: "/lines/[code]",
-                      params: {
-                        code: arrival.lineCode,
-                        routeCode: arrival.routeCode,
-                      },
-                    }}
-                  >
-                    {arrival.lineCode}
-                  </Link>
-                </Text>
-                <Text
-                  style={[{ flex: 12 }, styles.arrivalItem]}
+                <Link style={[{ width: 65 }, styles.linesTableText]}
+                  push
+                  onPress={() =>
+                    ToplasPreferences.appendRecentLine({
+                      lineCode: arrival.lineCode,
+                      routeCode: arrival.routeCode,
+                    })
+                  }
+                  href={{
+                    pathname: "/lines/[code]",
+                    params: {
+                      code: arrival.lineCode,
+                      routeCode: arrival.routeCode,
+                    },
+                  }}
+                >
+                  {arrival.lineCode}
+                </Link>
+                <Link
+                  push
+                  style={[{ flex: 1 }, styles.arrivalItem]}
                   numberOfLines={1}
                   ellipsizeMode="tail"
+                  href={{
+                    pathname: "/bus/[vehicleDoorNo]",
+                    params: {
+                      vehicleDoorNo: arrival.vehicleDoorNo,
+                      lineCode: arrival.lineCode,
+                      routeCode: arrival.routeCode,
+                    },
+                  }}
                 >
-                  <Link
-                    push
-                    href={{
-                      pathname: "/bus/[vehicleDoorNo]",
-                      params: {
-                        vehicleDoorNo: arrival.vehicleDoorNo,
-                        lineCode: arrival.lineCode,
-                        routeCode: arrival.routeCode,
-                      },
-                    }}
-                  >
-                    {arrival.lineName}
-                  </Link>
-                </Text>
-                <Text style={[{ flex: 2 }, styles.arrivalItem]}>
-                  {arrival.minutesUntilArrival}
+                  {arrival.lineName}
+                </Link>
+                <Text style={[{}, styles.arrivalItem]}>
+                  {`${arrival.minutesUntilArrival < 10 ? " " : ""}${arrival.minutesUntilArrival}`}
                 </Text>
               </View>
             ))}

@@ -14,7 +14,6 @@ export declare namespace LineStop {
         coordinates: Coordinates.Raw;
         direction: string;
         line_code: string;
-        line_id: number;
         route_code: string;
         route_order: number;
         route_direction: Direction.Raw;

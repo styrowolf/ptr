@@ -1,11 +1,13 @@
 {
+  "versionNotSupported": "This version of the app is no longer supported. Please update to the latest version.",
   "home": {
     "nearbyStops": "nearby stops",
     "findLines": "find lines",
     "findStops": "find stops",
     "recents": "Recents",
     "direction": "Direction",
-    "viewFleet": "view fleet"
+    "viewFleet": "view fleet",
+    "noStopsExplanation": "Recently visited stops appear here."
   },
   "nearbyStops": {
     "title": "Nearby Stops",

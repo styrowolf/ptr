@@ -54,7 +54,7 @@ export default function SearchPage() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}
       keyboardVerticalOffset={height}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
@@ -63,15 +63,13 @@ export default function SearchPage() {
           title: t("title"),
         }}
       />
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
-        <TextInput
+      <TextInput
           style={styles.searchBox}
           placeholder={t("searchPlaceholder")}
           placeholderTextColor="black"
           onChangeText={(text) => setQuery(text)}
         ></TextInput>
         <SearchResults query={debouncedQuery}></SearchResults>
-      </View>
     </KeyboardAvoidingView>
   );
 }

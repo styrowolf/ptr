@@ -14,6 +14,7 @@ import { ENABLE_OFFLINE_MAP_SETTINGS, MAP_BOUNDS } from "./utils";
 import OfflinePack from "@maplibre/maplibre-react-native/javascript/modules/offline/OfflinePack";
 import { OfflinePackError, OfflineProgressStatus } from "@maplibre/maplibre-react-native/javascript/modules/offline/offlineManager";
 import ToplasOfflineManager from "./mapManager";
+import * as WebBrowser from 'expo-web-browser';
 
 const styles = StyleSheet.create({
     sectionTitle: appStyles.t24b,
@@ -118,6 +119,13 @@ export default function Settings() {
                 }} labelField={"label"} valueField={"value"} 
             />
             <Divider height={20} />
+            <TouchableOpacity onPress={async () => {
+                await WebBrowser.openBrowserAsync('https://toplas.xyz/data-attribution');
+            }}><Text style={styles.text}>Data Attribution</Text></TouchableOpacity>
+            <Divider height={20} />
+            <TouchableOpacity onPress={async () => {
+                await WebBrowser.openBrowserAsync('https://toplas.xyz/licenses');
+            }}><Text style={styles.text}>Licenses</Text></TouchableOpacity>
         </ScrollView>
     );
 }

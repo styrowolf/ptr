@@ -245,8 +245,8 @@ export default function BusPage() {
           })}
         {bus && <BusMarker bus={bus} />}
       </MapLibreGL.MapView>
-      <BottomSheet snapPoints={[150, 300]} ref={(r) => bottomSheetRef.current = r}>
-        <View style={{ paddingHorizontal: 10, paddingTop: 10, marginBottom: bottom }}>
+      <BottomSheet snapPoints={[120 + bottom, 300 + bottom]} ref={(r) => bottomSheetRef.current = r}>
+        <View style={{ paddingHorizontal: 10, paddingTop: 10, paddingBottom: bottom }}>
           <TouchableOpacity onPress={() => { onPressVehicleSection(bottomSheetRef.current, showVehicleInfo, setShowVehicleInfo, showVehicleTasks, setShowVehicleTasks) }}><Text style={styles.text}>{t('vehicleInfo')}</Text></TouchableOpacity>
           { showVehicleInfo && <VehicleInfo bus={bus} /> }
           <Divider height={20} />
@@ -401,7 +401,7 @@ function VehicleTasks({ tasks }: { tasks: ToplasApi.VehicleTask[] }) {
           key={`${task.routeCode}-${i}`}
           style={{ flexDirection: "row", flex: 1 }}
         >
-          <Text style={[{flex: 3}, styles.linesTableText]}>
+          <Text style={[{ width: 65 }, styles.linesTableText]}>
             <Link
               push
               onPress={() =>
@@ -422,13 +422,13 @@ function VehicleTasks({ tasks }: { tasks: ToplasApi.VehicleTask[] }) {
             </Link>
           </Text>
           <Text
-            style={[{ flex: 12 }, styles.arrivalItem]}
+            style={[{ flex: 1 }, styles.arrivalItem]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {task.lineName}
           </Text>
-          <Text style={[{ flex: 3 }, styles.arrivalItem]}>
+          <Text style={[styles.arrivalItem]}>
             {task.taskStartTime}
           </Text>
         </View>

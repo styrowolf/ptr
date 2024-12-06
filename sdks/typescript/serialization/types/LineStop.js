@@ -36,7 +36,6 @@ exports.LineStop = core.serialization.object({
     coordinates: Coordinates_1.Coordinates,
     direction: core.serialization.string(),
     lineCode: core.serialization.property("line_code", core.serialization.string()),
-    lineId: core.serialization.property("line_id", core.serialization.number()),
     routeCode: core.serialization.property("route_code", core.serialization.string()),
     routeOrder: core.serialization.property("route_order", core.serialization.number()),
     routeDirection: core.serialization.property("route_direction", Direction_1.Direction),

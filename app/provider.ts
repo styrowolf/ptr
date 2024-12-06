@@ -65,4 +65,8 @@ export class ToplasDataProvider {
   static getFleet(): Promise<string[]> {
     return this.client.getFleetFleetGet()
   }
+
+  static async getSupportedVersions(): Promise<string[]> {
+    return (await this.client.supportedVersionsSupportedVersionsGet()) as string[];
+  }
 }

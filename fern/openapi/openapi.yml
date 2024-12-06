@@ -15,6 +15,16 @@ paths:
           content:
             application/json:
               schema: {}
+  /supported_versions:
+    get:
+      summary: Supported Versions
+      operationId: supported_versions_supported_versions_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
   /line/{line_code}/stops:
     get:
       summary: Line Stops
@@ -746,9 +756,6 @@ components:
         line_code:
           type: string
           title: Line Code
-        line_id:
-          type: integer
-          title: Line Id
         route_code:
           type: string
           title: Route Code
@@ -764,7 +771,6 @@ components:
         - coordinates
         - direction
         - line_code
-        - line_id
         - route_code
         - route_order
         - route_direction

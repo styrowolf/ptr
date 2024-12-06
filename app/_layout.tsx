@@ -57,7 +57,7 @@ function reconstructUrl(url: string, params?: Record<string, string>) {
     } else {
       return `/${fix}`;
     }
-  }  else {
+  } else {
     return `/${url.replace("/index", "").replace("index", "")}`;
   }
 }
@@ -98,8 +98,7 @@ export default function RootLayout() {
             const copied = Object.assign({}, s.data.state.routes);
             const urls = Object.entries(copied).map(([k, v]) => [k, v, v.name, v.params]);
             // @ts-ignore
-            const urlsReconstructed = urls.map(([a, b, n, p]) => reconstructUrl(n, p));
-            const lastTwo = urlsReconstructed.slice(-2);
+            const lastTwo = urls.slice(-2).map(([_0, _1, n, p]) => reconstructUrl(n, p));
             if (lastTwo.length == 1) {
               plausible.trackPageview(lastTwo[0]);
             } else {

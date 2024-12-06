@@ -28,6 +28,13 @@ export declare class ToplasApiClient {
      */
     readRootGet(requestOptions?: ToplasApiClient.RequestOptions): Promise<unknown>;
     /**
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.supportedVersionsSupportedVersionsGet()
+     */
+    supportedVersionsSupportedVersionsGet(requestOptions?: ToplasApiClient.RequestOptions): Promise<unknown>;
+    /**
      * @param {string} lineCode
      * @param {ToplasApi.LineStopsLineLineCodeStopsGetRequest} request
      * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.

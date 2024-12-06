@@ -42,8 +42,8 @@ exports.ToplasApiClient = void 0;
 const environments = __importStar(require("./environments"));
 const core = __importStar(require("./core"));
 const errors = __importStar(require("./errors/index"));
-const ToplasApi = __importStar(require("./api/index"));
 const url_join_1 = __importDefault(require("url-join"));
+const ToplasApi = __importStar(require("./api/index"));
 const serializers = __importStar(require("./serialization/index"));
 class ToplasApiClient {
     constructor(_options = {}) {
@@ -60,6 +60,53 @@ class ToplasApiClient {
         return __awaiter(this, void 0, void 0, function* () {
             const _response = yield core.fetcher({
                 url: (_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default,
+                method: "GET",
+                headers: {
+                    "X-Fern-Language": "JavaScript",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
+                },
+                contentType: "application/json",
+                requestType: "json",
+                timeoutMs: (requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.timeoutInSeconds) != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                maxRetries: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.maxRetries,
+                abortSignal: requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.abortSignal,
+            });
+            if (_response.ok) {
+                return _response.body;
+            }
+            if (_response.error.reason === "status-code") {
+                throw new errors.ToplasApiError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                });
+            }
+            switch (_response.error.reason) {
+                case "non-json":
+                    throw new errors.ToplasApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.rawBody,
+                    });
+                case "timeout":
+                    throw new errors.ToplasApiTimeoutError();
+                case "unknown":
+                    throw new errors.ToplasApiError({
+                        message: _response.error.errorMessage,
+                    });
+            }
+        });
+    }
+    /**
+     * @param {ToplasApiClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.supportedVersionsSupportedVersionsGet()
+     */
+    supportedVersionsSupportedVersionsGet(requestOptions) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const _response = yield core.fetcher({
+                url: (0, url_join_1.default)((_a = (yield core.Supplier.get(this._options.environment))) !== null && _a !== void 0 ? _a : environments.ToplasApiEnvironment.Default, "supported_versions"),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
