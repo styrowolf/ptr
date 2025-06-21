@@ -241,29 +241,30 @@ function RecentLines({ lines }: { lines: LineWithRoute[] }) {
             key={`${chunk.map((e) => e.routeCode).join("-")}-${i}`}
             style={{ flexDirection: "row" }}
           >
-            {arrayPad(chunk, 4, <View style={{ flex: 1 }}></View>).map(
-              (line: LineWithRoute, i) => (
-                <Link
-                  key={`${line.lineCode}-${i}`}
-                  style={[{ flex: 1 }, styles.linesTableText]}
-                  onPress={() =>
-                    ToplasPreferences.appendRecentLine({
-                      lineCode: line.lineCode,
-                      routeCode: line.routeCode,
-                    })
-                  }
-                  href={{
-                    pathname: "/lines/[code]",
-                    params: { code: line.lineCode, routeCode: line.routeCode },
-                  }}
-                >
-                  {line.lineCode}
-                </Link>
-              ),
-            )}
+            {arrayPad(
+              chunk.map(((l: LineWithRoute, i) => <LineItem i={i} line={l}></LineItem>)), 4, <View style={{ flex: 1 }}></View>)}
           </View>
         ))}
       </>
     );
   }
+}
+
+function LineItem({ line, i }: { line: LineWithRoute; i: number }) {
+  return (<Link
+    key={`${line.lineCode}-${i}`}
+    style={[{ flex: 1 }, styles.linesTableText]}
+    onPress={() =>
+      ToplasPreferences.appendRecentLine({
+        lineCode: line.lineCode,
+        routeCode: line.routeCode,
+      })
+    }
+    href={{
+      pathname: "/lines/[code]",
+      params: { code: line.lineCode, routeCode: line.routeCode },
+    }}
+  >
+    {line.lineCode}
+  </Link>)
 }
