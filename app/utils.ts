@@ -118,3 +118,10 @@ export const stopLayerStyle = {
   circleStrokeColor: "black",
   circleStrokeWidth: 3,
 } satisfies MapLibreGL.CircleLayerStyle;
+
+export const selectedStopLayerStyle = {
+  circleRadius: 8,
+  circleColor: "white",
+  circleStrokeColor: "#808080",
+  circleStrokeWidth: 3,
+} satisfies MapLibreGL.CircleLayerStyle;

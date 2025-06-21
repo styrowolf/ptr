@@ -19,15 +19,25 @@ import {
   MAP_PADDING,
   MAX_ZOOM,
   selectClosestFeature,
+  selectedStopLayerStyle,
   stopLayerStyle,
 } from "@/app/utils";
 import * as turf from "@turf/turf";
 import { ToplasDataProvider } from "@/app/provider";
+import LineBottomSheet from "./LineBottomSheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Will be null for most users (only Mapbox authenticates this way).
 // Required on Android. See Android installation notes.
 MapLibreGL.setAccessToken(null);
 
+function verticalShiftBounds(bounds: MapLibreGL.CameraBounds, shift: number) {
+  return {
+    ne: [bounds.ne[0], bounds.ne[1] + shift],
+    sw: [bounds.sw[0], bounds.sw[1] + shift],
+  };
+
+}
 const styles = StyleSheet.create({
   page: {
     flex: 1,
@@ -46,7 +56,7 @@ function makeGeojson(stops: ToplasApi.LineStop[]) {
     stops.map((stop, index) => {
       const point = turf.point(
         [stop.coordinates.x, stop.coordinates.y],
-        { stopName: stop.stopName, direction: stop.direction, index: index },
+        { stopName: stop.stopName, direction: stop.direction, index: index, selected: false },
         { id: stop.stopCode },
       );
       return point;
@@ -73,7 +83,6 @@ export default function LineMapPage() {
   const [lastTappedStopIndex, setLastTappedStopIndex] = useState<number | null>(
     null,
   );
-  const geojson = useMemo(() => makeGeojson(routeStops), [routeStops]);
 
   useEffect(() => {
     function getLiveData() {
@@ -92,6 +101,9 @@ export default function LineMapPage() {
       <Stack.Screen
         options={{
           title: `${code}`,
+          header(props) {
+              return (<View></View>)
+          },
         }}
       />
       <MapLibreGL.MapView
@@ -103,18 +115,25 @@ export default function LineMapPage() {
         <MapLibreGL.Camera
           maxZoomLevel={MAX_ZOOM}
           defaultSettings={{
-            bounds,
+            bounds: verticalShiftBounds(bounds, -0.08),
             padding: getPadding(MAP_PADDING),
           }}
         />
         <MapLibreGL.UserLocation renderMode="native" />
         <MapLibreGL.ShapeSource
           id="stops"
-          shape={geojson}
+          shape={makeGeojson(routeStops)}
           hitbox={{ width: 44, height: 44 }}
-          onPress={(e) =>
-            setLastTappedStopIndex(selectClosestFeature(e).properties?.index)
-          }
+          onPress={(e) => {
+            const feat = selectClosestFeature(e);
+            if (lastTappedStopIndex === feat.properties?.index) {
+              feat.properties!.selected = false;
+              setLastTappedStopIndex(null);
+            } else {
+              feat.properties!.selected = true;
+              setLastTappedStopIndex(feat.properties?.index);
+            }
+          }}
         >
           <MapLibreGL.CircleLayer
             id="stopCircles"
@@ -122,70 +141,27 @@ export default function LineMapPage() {
             maxZoomLevel={20}
             minZoomLevel={0}
             style={stopLayerStyle}
+            filter={["!", ["get", "selected"]]}
+          />
+          <MapLibreGL.CircleLayer
+            id="stopCirclesSelected"
+            sourceID="stops"
+            minZoomLevel={0}
+            maxZoomLevel={20}
+            style={selectedStopLayerStyle}
+            filter={["get", "selected"]}
           />
         </MapLibreGL.ShapeSource>
 
-        {routeStops
-          .filter((e, i) => i == lastTappedStopIndex)
-          .map((e, i) => {
-            return (
-              <StopMarker
-                onPress={() => setLastTappedStopIndex(null)}
-                key={`${e.stopCode}-${i}`}
-                stop={e}
-              />
-            );
-          })}
         {liveLine.filter((bus) => bus.routeCode == routeCode).map((e, i) => {
           return <BusMarker key={`${e.vehicleDoorNo}-${i}`} bus={e} />;
         })}
       </MapLibreGL.MapView>
+      <LineBottomSheet lastTappedStopIndex={lastTappedStopIndex} />
     </View>
   );
 }
 
-function StopMarker({
-  stop,
-  onPress,
-}: {
-  stop: ToplasApi.LineStop;
-  onPress?: () => void;
-}) {
-  const styles = StyleSheet.create({
-    stopCircle: {
-      borderWidth: 3,
-      borderRadius: 12,
-      borderStyle: "solid",
-      backgroundColor: "white",
-      height: 24,
-      width: 24,
-      borderColor: "black",
-      zIndex: -100,
-    },
-    stopNameBox: {
-      backgroundColor: "white",
-      borderWidth: 3,
-      padding: 4,
-      borderRadius: 12,
-      zIndex: -100,
-    },
-  });
-
-  return (
-    <MapLibreGL.MarkerView
-      coordinate={[stop.coordinates.x, stop.coordinates.y]}
-    >
-      <View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-        <TouchableOpacity onPress={onPress}>
-          <View style={{ height: 10 }}></View>
-          <View style={styles.stopNameBox}>
-            <Text>{stop.stopName}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </MapLibreGL.MarkerView>
-  );
-}
 
 function BusMarker({ bus }: { bus: ToplasApi.LiveBus }) {
   const [showText, setShowText] = useState(false);
